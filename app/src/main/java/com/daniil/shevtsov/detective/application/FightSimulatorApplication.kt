@@ -4,7 +4,7 @@ import android.app.Application
 import com.daniil.shevtsov.detective.common.di.initKoin
 import com.daniil.shevtsov.detective.core.di.DaggerAppComponent
 import com.daniil.shevtsov.detective.core.di.koin.appModule
-import com.daniil.shevtsov.detective.feature.coreshell.domain.appState
+import com.daniil.shevtsov.detective.feature.main.domain.appState
 import org.koin.core.Koin
 import timber.log.Timber
 import javax.inject.Inject

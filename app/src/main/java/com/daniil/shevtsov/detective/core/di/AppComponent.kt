@@ -3,7 +3,7 @@ package com.daniil.shevtsov.detective.core.di
 import android.content.Context
 import com.daniil.shevtsov.detective.application.DetectiveApplication
 import com.daniil.shevtsov.detective.core.navigation.ScreenHostFragment
-import com.daniil.shevtsov.detective.feature.coreshell.domain.AppState
+import com.daniil.shevtsov.detective.feature.main.domain.AppState
 import dagger.BindsInstance
 import dagger.Component
 

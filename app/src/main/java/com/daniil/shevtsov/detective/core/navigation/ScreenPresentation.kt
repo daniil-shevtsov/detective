@@ -1,7 +1,7 @@
 package com.daniil.shevtsov.detective.core.navigation
 
-import com.daniil.shevtsov.detective.feature.coreshell.domain.AppState
 import com.daniil.shevtsov.detective.feature.game.presentation.gamePresentation
+import com.daniil.shevtsov.detective.feature.main.domain.AppState
 
 
 fun screenPresentationFunctionalCore(

@@ -1,7 +1,7 @@
 package com.daniil.shevtsov.detective.feature.main.data
 
 import com.daniil.shevtsov.detective.core.di.AppScope
-import com.daniil.shevtsov.detective.feature.coreshell.domain.AppState
+import com.daniil.shevtsov.detective.feature.main.domain.AppState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow

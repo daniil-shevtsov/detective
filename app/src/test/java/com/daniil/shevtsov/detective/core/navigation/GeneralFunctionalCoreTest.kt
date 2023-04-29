@@ -5,8 +5,8 @@ import assertk.assertThat
 import assertk.assertions.containsExactly
 import assertk.assertions.isEqualTo
 import assertk.assertions.prop
-import com.daniil.shevtsov.detective.feature.coreshell.domain.AppState
 import com.daniil.shevtsov.detective.feature.coreshell.domain.appState
+import com.daniil.shevtsov.detective.feature.main.domain.AppState
 import org.junit.jupiter.api.Test
 
 internal class GeneralFunctionalCoreTest {

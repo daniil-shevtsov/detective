@@ -1,4 +1,4 @@
-package com.daniil.shevtsov.detective.feature.coreshell.domain
+package com.daniil.shevtsov.detective.feature.main.domain
 
 import com.daniil.shevtsov.detective.core.navigation.Screen
 import com.daniil.shevtsov.detective.feature.game.domain.GameState
