@@ -1,9 +1,11 @@
 package com.daniil.shevtsov.detective.feature.game.presentation
 
+import assertk.Assert
 import assertk.all
 import assertk.assertThat
 import assertk.assertions.containsExactly
 import assertk.assertions.isEqualTo
+import assertk.assertions.isInstanceOf
 import assertk.assertions.prop
 import com.daniil.shevtsov.detective.feature.game.domain.gameState
 import org.junit.jupiter.api.Test
@@ -27,14 +29,22 @@ internal class GamePresentationKtTest {
         )
         assertThat(viewState)
             .all {
-                prop(GameViewState::time).isEqualTo("23-04-29")
+                prop(GameViewState::time).isSet("23-04-29")
                 prop(GameViewState::events).containsExactly(
                     "John Doe shot John Smith with .44 revolver",
                     "John Smith died of Gunshot Wound",
                     "John Doe took golden idol",
                 )
-                prop(GameViewState::place).isEqualTo("Apartment no. 34 of 246 Green Street")
-                prop(GameViewState::motive).isEqualTo("John Smith took golden idol")
+                prop(GameViewState::place).isSet("Apartment no. 34 of 246 Green Street")
+                prop(GameViewState::motive).all {
+                    prop(MotiveModel::subject).isSet("John Smith")
+                    prop(MotiveModel::verb).isSet("took")
+                    prop(MotiveModel::objectNoun).isSet("golden idol")
+                }
             }
     }
+
+    private fun Assert<Slot>.isEmpty() = isInstanceOf(Slot.Empty::class)
+    private fun Assert<Slot>.isSet(expected: String) =
+        isInstanceOf(Slot.Set::class).prop(Slot.Set::value).isEqualTo(expected)
 }
