@@ -1,7 +1,10 @@
 package com.daniil.shevtsov.detective.feature.game.presentation
 
-import com.daniil.shevtsov.detective.feature.game.domain.GameState
-
 class GameViewState(
-    val domain: GameState,
+    val time: String,
+    val events: List<String>,
+    val place: String,
+    val motive: String,
 )
+
+

@@ -5,7 +5,6 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import com.daniil.shevtsov.detective.feature.game.domain.GameAction
-import com.daniil.shevtsov.detective.feature.game.domain.gameState
 import com.daniil.shevtsov.detective.feature.game.presentation.GameViewState
 
 typealias OnGameAction = (action: GameAction) -> Unit
@@ -15,18 +14,14 @@ typealias OnGameAction = (action: GameAction) -> Unit
 fun GameScreenPreview() {
     GameScreen(
         state = GameViewState(
-            domain = gameState(
-                perpetrator = "John Doe",
-                victim = "John Smith",
-                time = "23-04-29",
-                place = "Apartment no. 34 of 246 Green Street",
-                deathCause = "Gunshot Wound",
-                weapon = ".44 revolver",
-                murderAction = "shot",
-                crimeAction = "took",
-                stolenObject = "golden idol",
-                motive = "took thee golden idol",
-            )
+            time = "23-04-29",
+            events = listOf(
+                "John Doe shot John Smith with .44 revolver",
+                "John Smith died of Gunshot Wound",
+                "John Doe took golden idol",
+            ),
+            place = "Apartment no. 34 of 246 Green Street",
+            motive = "John Smith took golden idol",
         ),
         onAction = {}
     )
@@ -38,14 +33,14 @@ fun GameScreen(
     onAction: OnGameAction,
 ) {
     Column {
-        with(state.domain) {
-            Text("When: ${state.domain.time}")
+        with(state) {
+            Text("When: $time")
             Text("Who and What:")
-            Text("$perpetrator $murderAction $victim with $weapon")
-            Text("$victim died of $deathCause")
-            Text("$perpetrator took $stolenObject")
+            state.events.forEach { event ->
+                Text(event)
+            }
             Text("Where: $place")
-            Text("Why: $victim took $stolenObject")
+            Text("Why: $motive")
         }
     }
 }
