@@ -2,8 +2,7 @@ package com.daniil.shevtsov.detective.core.navigation
 
 import assertk.assertThat
 import assertk.assertions.isInstanceOf
-import com.daniil.shevtsov.detective.feature.coreshell.domain.appState
-
+import com.daniil.shevtsov.detective.feature.main.domain.appState
 
 
 import org.junit.jupiter.api.Test

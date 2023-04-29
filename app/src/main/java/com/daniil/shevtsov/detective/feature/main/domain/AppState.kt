@@ -2,6 +2,7 @@ package com.daniil.shevtsov.detective.feature.main.domain
 
 import com.daniil.shevtsov.detective.core.navigation.Screen
 import com.daniil.shevtsov.detective.feature.game.domain.GameState
+import com.daniil.shevtsov.detective.feature.game.domain.gameState
 
 
 data class AppState(
@@ -13,7 +14,7 @@ data class AppState(
 fun appState(
     currentScreen: Screen = Screen.Main,
     screenStack: List<Screen> = emptyList(),
-    gameState: GameState = GameState(),
+    gameState: GameState = gameState(),
 ) = AppState(
     currentScreen = currentScreen,
     screenStack = screenStack,
