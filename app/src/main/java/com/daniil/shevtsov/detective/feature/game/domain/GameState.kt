@@ -12,7 +12,7 @@ data class GameState(
     val stolenObject: String,
     val motive: String,
     val slottables: List<Slottable>,
-    val slots: List<List<Slot>>,
+    val slots: List<FormLine>,
 )
 
 fun gameState(
@@ -27,7 +27,7 @@ fun gameState(
     stolenObject: String = "",
     motive: String = "",
     slottables: List<Slottable> = emptyList(),
-    slots: List<List<Slot>> = listOf(listOf(slot())),
+    slots: List<FormLine> = listOf(FormLine(listOf(slot()))),
 ) = GameState(
     perpetrator = perpetrator,
     victim = victim,

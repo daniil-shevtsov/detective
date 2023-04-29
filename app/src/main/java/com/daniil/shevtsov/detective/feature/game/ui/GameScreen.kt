@@ -55,6 +55,8 @@ private fun slotModel(text: String) = SlotModel.Set(
     )
 )
 
+private fun slotText(text: String) = SlotModel.Text(0L, text)
+
 @Preview
 @Composable
 fun GameScreenPreview() {
@@ -62,9 +64,17 @@ fun GameScreenPreview() {
         state = GameViewState(
             time = slotModel("23-04-29"),
             events = listOf(
-                "John Doe shot John Smith with .44 revolver",
-                "John Smith died of Gunshot Wound",
-                "John Doe took golden idol",
+                FormLineModel(
+                    listOf(
+                        slotModel("John Doe"),
+                        slotModel("shot"),
+                        slotModel("John Smith"),
+                        slotText("with"),
+                        slotModel(".44 revolver"),
+                    )
+                ),
+                FormLineModel(listOf(slotModel("John Smith died of Gunshot Wound"))),
+                FormLineModel(listOf(slotModel("John Doe took golden idol"))),
             ),
             place = slotModel("Apartment no. 34 of 246 Green Street"),
             motive = MotiveModel(
@@ -140,12 +150,28 @@ fun FillInForm(
             SlotRow(title = "When", slot = state.time, onDrop = onDrop)
             Text("Who and What:")
             state.events.forEach { event ->
-                Text(event)
+                FormLine(event, onDrop)
             }
             SlotRow(title = "Where", slot = state.place, onDrop = onDrop)
             SlotRow(title = "Why") {
                 Motive(motive, onDrop)
             }
+        }
+    }
+}
+
+@Composable
+fun FormLine(
+    line: FormLineModel,
+    onDrop: OnDrop,
+) {
+    Row(
+        modifier = Modifier.background(Color.Gray),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = spacedBy(4.dp)
+    ) {
+        line.slots.forEach {
+            Slot(it, onDrop)
         }
     }
 }
@@ -199,7 +225,7 @@ fun Slot(model: SlotModel, onDrop: OnDrop) {
     DropTarget<Long>(
         modifier = Modifier
     ) { isInBound, slottableId ->
-        if (slottableId != null && isInBound) {
+        if (model !is SlotModel.Text && slottableId != null && isInBound) {
             Timber.d("before launched effect for ${model.id}")
             LaunchedEffect(slottableId, isInBound) {
                 Timber.d("inside launched effect for ${model.id}")
@@ -231,6 +257,9 @@ fun Slot(model: SlotModel, onDrop: OnDrop) {
                 contentAlignment = Alignment.Center
             ) {
                 Text(textAlign = TextAlign.Center, text = model.value.text)
+            }
+            is SlotModel.Text -> {
+                Text(text = model.text)
             }
         }
     }

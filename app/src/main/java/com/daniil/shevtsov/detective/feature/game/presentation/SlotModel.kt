@@ -8,4 +8,6 @@ sealed interface SlotModel {
         override val id: Long,
         val value: SlottableModel
     ) : SlotModel
+
+    data class Text(override val id: Long, val text: String) : SlotModel
 }

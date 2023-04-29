@@ -6,7 +6,7 @@ data class Slot(
     val id: Long,
     val content: Slottable?,
     val type: SlottableType,
-)
+) : FormElement
 
 @TestOnly
 fun slot(

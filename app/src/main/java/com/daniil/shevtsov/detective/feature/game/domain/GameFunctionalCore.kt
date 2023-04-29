@@ -14,10 +14,9 @@ fun gameFunctionalCore(
 }
 
 fun onSlottableDrop(state: AppState, action: GameAction.SlottableDrop): AppState {
-    val slotOfDrop =
-        state.gameState.slots.map { slotLists ->
-            slotLists.find { slot -> slot.id == action.slotId }
-        }.filterNotNull().firstOrNull()
+    val slotOfDrop = state.gameState.slots.map { slotLists ->
+        slotLists.elements.find { slot -> slot is Slot && slot.id == action.slotId }
+    }.filterNotNull().firstOrNull() as? Slot
     val droppedSlottable =
         state.gameState.slottables.find { slottable -> slottable.id == action.slottableId }
 
@@ -30,12 +29,19 @@ fun onSlottableDrop(state: AppState, action: GameAction.SlottableDrop): AppState
                     slottable.id != droppedSlottable.id
                 },
                 slots = state.gameState.slots.map { slotList ->
-                    slotList.map { slot ->
-                        when (slot.id) {
-                            slotOfDrop.id -> slot.copy(content = droppedSlottable)
-                            else -> slot
+                    slotList.copy(
+                        elements = slotList.elements.map { slot ->
+                            when (slot) {
+                                is Slot -> when (slot.id) {
+                                    slotOfDrop.id -> slot.copy(content = droppedSlottable)
+                                    else -> slot
+                                }
+                                else -> slot
+                            }
+
                         }
-                    }
+                    )
+
                 }
             )
         )
@@ -105,12 +111,37 @@ private fun init(state: AppState): AppState {
                 ),
             ),
             slots = listOf(
-                listOf(Slot(id = 0L, content = null, type = SlottableType.Time)),
-                listOf(Slot(id = 1L, content = null, type = SlottableType.Place)),
-                listOf(
-                    Slot(id = 2L, content = null, type = SlottableType.Person),
-                    Slot(id = 3L, content = null, type = SlottableType.Verb),
-                    Slot(id = 4L, content = null, type = SlottableType.Noun),
+                FormLine(listOf(Slot(id = 0L, content = null, type = SlottableType.Time))),
+                FormLine(listOf(Slot(id = 1L, content = null, type = SlottableType.Place))),
+                FormLine(
+                    listOf(
+                        Slot(id = 5L, content = null, type = SlottableType.Person),
+                        Slot(id = 6L, content = null, type = SlottableType.Verb),
+                        Slot(id = 7L, content = null, type = SlottableType.Person),
+                        FormText("with"),
+                        Slot(id = 8L, content = null, type = SlottableType.Noun),
+                    )
+                ),
+                FormLine(
+                    listOf(
+                        Slot(id = 9L, content = null, type = SlottableType.Person),
+                        FormText("died of"),
+                        Slot(id = 10L, content = null, type = SlottableType.Noun),
+                    )
+                ),
+                FormLine(
+                    listOf(
+                        Slot(id = 11L, content = null, type = SlottableType.Person),
+                        Slot(id = 12L, content = null, type = SlottableType.Verb),
+                        Slot(id = 13L, content = null, type = SlottableType.Noun),
+                    )
+                ),
+                FormLine(
+                    listOf(
+                        Slot(id = 2L, content = null, type = SlottableType.Person),
+                        Slot(id = 3L, content = null, type = SlottableType.Verb),
+                        Slot(id = 4L, content = null, type = SlottableType.Noun),
+                    )
                 ),
             )
         )
