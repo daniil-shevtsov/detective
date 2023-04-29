@@ -18,6 +18,24 @@ typealias OnGameAction = (action: GameAction) -> Unit
 
 @Preview
 @Composable
+fun GameScreenEmptyPreview() {
+    GameScreen(
+        state = GameViewState(
+            time = Slot.Empty,
+            events = emptyList(),
+            place = Slot.Empty,
+            motive = MotiveModel(
+                subject = Slot.Empty,
+                verb = Slot.Empty,
+                objectNoun = Slot.Empty
+            ),
+        ),
+        onAction = {}
+    )
+}
+
+@Preview
+@Composable
 fun GameScreenPreview() {
     GameScreen(
         state = GameViewState(
@@ -27,10 +45,10 @@ fun GameScreenPreview() {
                 "John Smith died of Gunshot Wound",
                 "John Doe took golden idol",
             ),
-            place = Slot.Empty,
+            place = Slot.Set("Apartment no. 34 of 246 Green Street"),
             motive = MotiveModel(
                 subject = Slot.Set("John Smith"),
-                verb = Slot.Empty,
+                verb = Slot.Set("took"),
                 objectNoun = Slot.Set("golden idol")
             ),
         ),

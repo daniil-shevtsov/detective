@@ -3,16 +3,29 @@ package com.daniil.shevtsov.detective.feature.game.presentation
 import assertk.Assert
 import assertk.all
 import assertk.assertThat
-import assertk.assertions.containsExactly
-import assertk.assertions.isEqualTo
-import assertk.assertions.isInstanceOf
-import assertk.assertions.prop
+import assertk.assertions.*
 import com.daniil.shevtsov.detective.feature.game.domain.gameState
 import org.junit.jupiter.api.Test
 
 internal class GamePresentationKtTest {
     @Test
     fun `should create initial state`() {
+        val viewState = gamePresentation(state = gameState())
+        assertThat(viewState)
+            .all {
+                prop(GameViewState::time).isEmpty()
+                prop(GameViewState::events).isEmpty()
+                prop(GameViewState::place).isEmpty()
+                prop(GameViewState::motive).all {
+                    prop(MotiveModel::subject).isEmpty()
+                    prop(MotiveModel::verb).isEmpty()
+                    prop(MotiveModel::objectNoun).isEmpty()
+                }
+            }
+    }
+
+    @Test
+    fun `should create set state`() {
         val viewState = gamePresentation(
             state = gameState(
                 perpetrator = "John Doe",
