@@ -4,7 +4,9 @@ import assertk.Assert
 import assertk.all
 import assertk.assertThat
 import assertk.assertions.*
+import com.daniil.shevtsov.detective.feature.game.domain.SlottableType
 import com.daniil.shevtsov.detective.feature.game.domain.gameState
+import com.daniil.shevtsov.detective.feature.game.domain.slottable
 import org.junit.jupiter.api.Test
 
 internal class GamePresentationKtTest {
@@ -38,6 +40,13 @@ internal class GamePresentationKtTest {
                 crimeAction = "took",
                 stolenObject = "golden idol",
                 motive = "took thee golden idol",
+                slottables = listOf(
+                    slottable(
+                        id = 1L,
+                        value = "23-05-05",
+                        type = SlottableType.Time
+                    )
+                )
             )
         )
         assertThat(viewState)
@@ -54,6 +63,9 @@ internal class GamePresentationKtTest {
                     prop(MotiveModel::verb).isSet("took")
                     prop(MotiveModel::objectNoun).isSet("golden idol")
                 }
+                prop(GameViewState::trayWords)
+                    .extracting(SlottableModel::text)
+                    .containsOnly("23-05-05")
             }
     }
 

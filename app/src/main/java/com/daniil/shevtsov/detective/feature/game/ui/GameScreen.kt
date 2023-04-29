@@ -30,11 +30,16 @@ fun GameScreenEmptyPreview() {
                 verb = emptySlotModel(),
                 objectNoun = emptySlotModel(),
             ),
-            trayWords = listOf("lol", "kek", "cheburek")
+            trayWords = emptyList()
         ),
         onAction = {}
     )
 }
+
+private fun slottableModel(text: String) = SlottableModel(
+    id = 0L,
+    text = text,
+)
 
 private fun emptySlotModel() = SlotModel.Empty(id = 0L)
 
@@ -63,6 +68,11 @@ fun GameScreenPreview() {
                 verb = slotModel("took"),
                 objectNoun = slotModel("golden idol")
             ),
+            trayWords = listOf(
+                slottableModel("Jane Doe"),
+                slottableModel("stole"),
+                slottableModel("cheburek")
+            )
         ),
         onAction = {}
     )
@@ -101,11 +111,11 @@ fun WordTray(
 }
 
 @Composable
-fun TrayWord(value: String) {
-    DragTarget(modifier = Modifier, dataToDrop = value) {
+fun TrayWord(model: SlottableModel) {
+    DragTarget(modifier = Modifier, dataToDrop = model.id) {
         Text(
             modifier = Modifier.background(Color.Gray).padding(8.dp),
-            text = value
+            text = model.text
         )
     }
 }

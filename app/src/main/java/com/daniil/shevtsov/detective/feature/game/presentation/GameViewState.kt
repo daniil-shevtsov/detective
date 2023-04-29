@@ -5,7 +5,7 @@ data class GameViewState(
     val events: List<String>,
     val place: SlotModel,
     val motive: MotiveModel,
-    val trayWords: List<String> = listOf("kek1", "kek2"),
+    val trayWords: List<SlottableModel>,
 )
 
 

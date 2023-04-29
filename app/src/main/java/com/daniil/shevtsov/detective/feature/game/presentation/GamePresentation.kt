@@ -25,6 +25,11 @@ fun gamePresentation(state: GameState): GameViewState {
                 verb = slotFromString(crimeAction),
                 objectNoun = slotFromString(stolenObject)
             ),
+            trayWords = slottables.map { slottable ->
+                with(slottable) {
+                    SlottableModel(id = id, text = value)
+                }
+            }
         )
     }
 }
