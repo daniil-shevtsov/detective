@@ -27,7 +27,7 @@ fun gameState(
     stolenObject: String = "",
     motive: String = "",
     slottables: List<Slottable> = emptyList(),
-    slots: List<List<Slot>> = emptyList(),
+    slots: List<List<Slot>> = listOf(listOf(slot())),
 ) = GameState(
     perpetrator = perpetrator,
     victim = victim,

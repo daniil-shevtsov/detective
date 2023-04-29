@@ -6,11 +6,7 @@ import com.daniil.shevtsov.detective.feature.game.domain.Slot
 fun gamePresentation(state: GameState): GameViewState {
     return with(state) {
         GameViewState(
-            time = if (slots.isNotEmpty()) {
-                mapSlot(slots[0][0])
-            } else {
-                slotFromString(time)
-            },
+            time = mapSlot(slots[0][0]),
             events = when {
                 state.perpetrator.isNotEmpty() -> listOf(
                     "$perpetrator $murderAction $victim with $weapon",
@@ -19,11 +15,11 @@ fun gamePresentation(state: GameState): GameViewState {
                 )
                 else -> emptyList()
             },
-            place = slotFromString(place),
+            place = mapSlot(slots[1][0]),
             motive = MotiveModel(
-                subject = slotFromString(victim),
-                verb = slotFromString(crimeAction),
-                objectNoun = slotFromString(stolenObject)
+                subject = mapSlot(slots[2][0]),
+                verb = mapSlot(slots[2][1]),
+                objectNoun = mapSlot(slots[2][2])
             ),
             trayWords = slottables.map { slottable ->
                 with(slottable) {
