@@ -1,4 +1,7 @@
 package com.daniil.shevtsov.detective.feature.game.presentation
 
-class GameViewState {
-}
+import com.daniil.shevtsov.detective.feature.game.domain.GameState
+
+class GameViewState(
+    val domain: GameState,
+)
