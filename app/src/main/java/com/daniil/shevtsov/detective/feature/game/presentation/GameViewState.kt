@@ -1,10 +1,10 @@
 package com.daniil.shevtsov.detective.feature.game.presentation
 
 class GameViewState(
-    val time: String,
+    val time: Slot,
     val events: List<String>,
-    val place: String,
-    val motive: String,
+    val place: Slot,
+    val motive: Slot,
 )
 
 

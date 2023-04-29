@@ -5,14 +5,14 @@ import com.daniil.shevtsov.detective.feature.game.domain.GameState
 fun gamePresentation(state: GameState): GameViewState {
     return with(state) {
         GameViewState(
-            time = time,
+            time = Slot.Set(time),
             events = listOf(
                 "$perpetrator $murderAction $victim with $weapon",
                 "$victim died of $deathCause",
                 "$perpetrator took $stolenObject",
             ),
-            place = place,
-            motive = "$victim took $stolenObject",
+            place = Slot.Set(place),
+            motive = Slot.Set("$victim took $stolenObject"),
         )
     }
 
