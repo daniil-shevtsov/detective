@@ -3,6 +3,12 @@ package com.daniil.shevtsov.detective.core.navigation
 import android.content.Context
 import android.os.Bundle
 import android.view.View
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
@@ -10,8 +16,9 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.daniil.shevtsov.detective.R
 import com.daniil.shevtsov.detective.application.DetectiveApplication
 import com.daniil.shevtsov.detective.databinding.FragmentMainBinding
-import com.daniil.shevtsov.detective.feature.main.view.ScreenHostComposable
-
+import com.daniil.shevtsov.detective.feature.game.presentation.FoodItemCard
+import com.daniil.shevtsov.detective.feature.game.presentation.LongPressDraggable
+import com.daniil.shevtsov.detective.feature.game.presentation.PersonListContainer
 import com.google.accompanist.insets.ProvideWindowInsets
 import javax.inject.Inject
 
@@ -39,10 +46,37 @@ class ScreenHostFragment : Fragment(R.layout.fragment_main) {
         with(binding) {
             composeView.setContent {
                 ProvideWindowInsets {
-                    ScreenHostComposable(viewModel = viewModel)
+                    LongPressDraggable(modifier = Modifier.fillMaxSize()) {
+                        LazyColumn(
+                            modifier = Modifier.fillMaxSize(),
+                            contentPadding = PaddingValues(horizontal = 10.dp)
+                        ) {
+                            items(items = foodList) { food ->
+                                FoodItemCard(foodItem = food)
+                            }
+                        }
+                        PersonListContainer()
+                    }
+//                    ScreenHostComposable(viewModel = viewModel)
 //                    DetectiveScreenComposable(imperativeShell = detectiveImperativeShell)
                 }
             }
         }
     }
 }
+
+data class FoodItem(val id: Int, val name: String, val price: Double)
+
+val foodList = listOf(
+    FoodItem(1, "Pizza", 20.0),
+    FoodItem(2, "French toast", 10.05),
+    FoodItem(3, "Chocolate cake", 12.99),
+)
+
+data class Person(val id: Int, val name: String)
+
+val persons = listOf(
+    Person(1, "Jhone"),
+    Person(2, "Eyle"),
+    Person(3, "Tommy"),
+)
