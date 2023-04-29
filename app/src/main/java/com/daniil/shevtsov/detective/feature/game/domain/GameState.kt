@@ -11,6 +11,8 @@ data class GameState(
     val crimeAction: String,
     val stolenObject: String,
     val motive: String,
+    val slottables: List<Slottable>,
+    val slots: List<List<Slot>>,
 )
 
 fun gameState(
@@ -24,6 +26,8 @@ fun gameState(
     crimeAction: String = "",
     stolenObject: String = "",
     motive: String = "",
+    slottables: List<Slottable> = emptyList(),
+    slots: List<List<Slot>> = emptyList(),
 ) = GameState(
     perpetrator = perpetrator,
     victim = victim,
@@ -35,4 +39,6 @@ fun gameState(
     crimeAction = crimeAction,
     stolenObject = stolenObject,
     motive = motive,
+    slottables = slottables,
+    slots = slots,
 )

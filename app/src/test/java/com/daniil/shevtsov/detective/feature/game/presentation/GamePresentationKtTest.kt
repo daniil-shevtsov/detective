@@ -57,7 +57,10 @@ internal class GamePresentationKtTest {
             }
     }
 
-    private fun Assert<Slot>.isEmpty() = isInstanceOf(Slot.Empty::class)
-    private fun Assert<Slot>.isSet(expected: String) =
-        isInstanceOf(Slot.Set::class).prop(Slot.Set::value).isEqualTo(expected)
+    private fun Assert<SlotModel>.isEmpty() = isInstanceOf(SlotModel.Empty::class)
+    private fun Assert<SlotModel>.isSet(expected: String) =
+        isInstanceOf(SlotModel.Set::class)
+            .prop(SlotModel.Set::value)
+            .prop(SlottableModel::text)
+            .isEqualTo(expected)
 }

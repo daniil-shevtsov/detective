@@ -15,19 +15,20 @@ import com.daniil.shevtsov.detective.feature.game.domain.GameAction
 import com.daniil.shevtsov.detective.feature.game.presentation.*
 
 typealias OnGameAction = (action: GameAction) -> Unit
+typealias OnDrop = (slotId: Long, slottableId: Long) -> Unit
 
 @Preview
 @Composable
 fun GameScreenEmptyPreview() {
     GameScreen(
         state = GameViewState(
-            time = Slot.Empty,
+            time = emptySlotModel(),
             events = emptyList(),
-            place = Slot.Empty,
+            place = emptySlotModel(),
             motive = MotiveModel(
-                subject = Slot.Empty,
-                verb = Slot.Empty,
-                objectNoun = Slot.Empty
+                subject = emptySlotModel(),
+                verb = emptySlotModel(),
+                objectNoun = emptySlotModel(),
             ),
             trayWords = listOf("lol", "kek", "cheburek")
         ),
@@ -35,22 +36,32 @@ fun GameScreenEmptyPreview() {
     )
 }
 
+private fun emptySlotModel() = SlotModel.Empty(id = 0L)
+
+private fun slotModel(text: String) = SlotModel.Set(
+    id = 0L,
+    value = SlottableModel(
+        id = 0L,
+        text = text,
+    )
+)
+
 @Preview
 @Composable
 fun GameScreenPreview() {
     GameScreen(
         state = GameViewState(
-            time = Slot.Set("23-04-29"),
+            time = slotModel("23-04-29"),
             events = listOf(
                 "John Doe shot John Smith with .44 revolver",
                 "John Smith died of Gunshot Wound",
                 "John Doe took golden idol",
             ),
-            place = Slot.Set("Apartment no. 34 of 246 Green Street"),
+            place = slotModel("Apartment no. 34 of 246 Green Street"),
             motive = MotiveModel(
-                subject = Slot.Set("John Smith"),
-                verb = Slot.Set("took"),
-                objectNoun = Slot.Set("golden idol")
+                subject = slotModel("John Smith"),
+                verb = slotModel("took"),
+                objectNoun = slotModel("golden idol")
             ),
         ),
         onAction = {}
@@ -64,7 +75,12 @@ fun GameScreen(
 ) {
     LongPressDraggable(modifier = Modifier.size(600.dp)) {
         Column(modifier = Modifier.background(Color.Gray)) {
-            FillInForm(state)
+            FillInForm(
+                state = state,
+                onDrop = { slotId, slottableId ->
+                    onAction(GameAction.SlottableDrop(slotId, slottableId))
+                }
+            )
             WordTray(state)
         }
     }
@@ -78,7 +94,7 @@ fun WordTray(
         modifier = Modifier.padding(8.dp).background(Color.DarkGray).padding(4.dp),
         horizontalArrangement = spacedBy(4.dp)
     ) {
-        state.trayWords.forEach { word->
+        state.trayWords.forEach { word ->
             TrayWord(word)
         }
     }
@@ -97,17 +113,18 @@ fun TrayWord(value: String) {
 @Composable
 fun FillInForm(
     state: GameViewState,
+    onDrop: OnDrop,
 ) {
     Column(modifier = Modifier.background(Color.Gray), verticalArrangement = spacedBy(4.dp)) {
         with(state) {
-            SlotRow(title = "When", slot = state.time)
+            SlotRow(title = "When", slot = state.time, onDrop = onDrop)
             Text("Who and What:")
             state.events.forEach { event ->
                 Text(event)
             }
-            SlotRow(title = "Where", slot = state.place)
+            SlotRow(title = "Where", slot = state.place, onDrop = onDrop)
             SlotRow(title = "Why") {
-                Motive(motive)
+                Motive(motive, onDrop)
             }
         }
     }
@@ -116,19 +133,11 @@ fun FillInForm(
 @Composable
 fun SlotRow(
     title: String,
-    slot: Slot,
+    slot: SlotModel,
+    onDrop: OnDrop,
 ) {
     SlotRow(title = title) {
-        DropTarget<String>(
-            modifier = Modifier
-        ) { isInBound, foodItem ->
-//            if (foodItem != null && isInBound) {
-//                Slot(Slot.Set(foodItem))
-//            } else {
-//                Slot.Empty
-//            }
-            Slot(slot)
-        }
+        Slot(slot, onDrop)
     }
 }
 
@@ -148,47 +157,57 @@ fun SlotRow(
 }
 
 @Composable
-fun Motive(model: MotiveModel) {
+fun Motive(
+    model: MotiveModel,
+    onDrop: OnDrop,
+) {
     Row(
         modifier = Modifier.background(Color.Gray),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = spacedBy(4.dp)
     ) {
         with(model) {
-            Slot(model.subject)
-            Slot(model.verb)
-            Slot(model.objectNoun)
+            Slot(model.subject, onDrop)
+            Slot(model.verb, onDrop)
+            Slot(model.objectNoun, onDrop)
         }
     }
 }
 
 @Composable
-fun Slot(state: Slot) {
-    when (state) {
-        is Slot.Empty -> Box(
-            modifier = Modifier
-                .width(80.dp)
-                .background(Color.DarkGray)
-                .padding(1.dp)
-                .background(Color.Black)
-                .padding(4.dp)
-                .background(Color.Black)
-                .padding(4.dp)
-        ) {
-            Text("")
+fun Slot(model: SlotModel, onDrop: OnDrop) {
+    DropTarget<Long>(
+        modifier = Modifier
+    ) { isInBound, slottableId ->
+        if (slottableId != null && isInBound) {
+            onDrop(model.id, slottableId)
         }
-        is Slot.Set -> Box(
-            modifier = Modifier
-                .defaultMinSize(minWidth = 60.dp)
-                .background(Color.DarkGray)
-                .padding(1.dp)
-                .background(Color.Black)
-                .padding(4.dp)
-                .background(Color.Gray)
-                .padding(4.dp),
-            contentAlignment = Alignment.Center
-        ) {
-            Text(textAlign = TextAlign.Center, text = state.value)
+        when (model) {
+            is SlotModel.Empty -> Box(
+                modifier = Modifier
+                    .width(80.dp)
+                    .background(Color.DarkGray)
+                    .padding(1.dp)
+                    .background(Color.Black)
+                    .padding(4.dp)
+                    .background(Color.Black)
+                    .padding(4.dp)
+            ) {
+                Text("")
+            }
+            is SlotModel.Set -> Box(
+                modifier = Modifier
+                    .defaultMinSize(minWidth = 60.dp)
+                    .background(Color.DarkGray)
+                    .padding(1.dp)
+                    .background(Color.Black)
+                    .padding(4.dp)
+                    .background(Color.Gray)
+                    .padding(4.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(textAlign = TextAlign.Center, text = model.value.text)
+            }
         }
     }
 }
