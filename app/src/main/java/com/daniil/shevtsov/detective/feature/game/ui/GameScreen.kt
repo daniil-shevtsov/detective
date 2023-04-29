@@ -11,6 +11,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.daniil.shevtsov.detective.feature.game.domain.GameAction
 import com.daniil.shevtsov.detective.feature.game.presentation.GameViewState
+import com.daniil.shevtsov.detective.feature.game.presentation.MotiveModel
 import com.daniil.shevtsov.detective.feature.game.presentation.Slot
 
 typealias OnGameAction = (action: GameAction) -> Unit
@@ -27,7 +28,11 @@ fun GameScreenPreview() {
                 "John Doe took golden idol",
             ),
             place = Slot.Empty,
-            motive = Slot.Set("John Smith took golden idol"),
+            motive = MotiveModel(
+                subject = Slot.Set("John Smith"),
+                verb = Slot.Empty,
+                objectNoun = Slot.Set("golden idol")
+            ),
         ),
         onAction = {}
     )
@@ -47,7 +52,9 @@ fun GameScreen(
                 Text(event)
             }
             SlotRow(title = "Where", slot = state.place)
-            SlotRow(title = "Why", slot = state.motive)
+            SlotRow(title = "Why") {
+                Motive(motive)
+            }
         }
     }
 }
@@ -55,14 +62,38 @@ fun GameScreen(
 @Composable
 fun SlotRow(
     title: String,
-    slot: Slot
+    slot: Slot,
+) {
+    SlotRow(title = title) {
+        Slot(slot)
+    }
+}
+
+@Composable
+fun SlotRow(
+    title: String,
+    content: @Composable () -> Unit,
 ) {
     Row(
         modifier = Modifier.background(Color.Gray),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(text = "$title:")
-        Slot(slot)
+        content.invoke()
+    }
+}
+
+@Composable
+fun Motive(model: MotiveModel) {
+    Row(
+        modifier = Modifier.background(Color.Gray),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        with(model) {
+            Slot(model.subject)
+            Slot(model.verb)
+            Slot(model.objectNoun)
+        }
     }
 }
 
@@ -71,12 +102,16 @@ fun Slot(state: Slot) {
     when (state) {
         is Slot.Empty -> Box(
             modifier = Modifier
-                .width(100.dp)
-                .height(50.dp)
+                .width(80.dp)
                 .background(Color.Gray)
-                .padding(12.dp)
+                .padding(4.dp)
                 .background(Color.Black)
-        )
+                .padding(4.dp)
+                .background(Color.Black)
+                .padding(4.dp)
+        ) {
+            Text("")
+        }
         is Slot.Set -> Box(
             modifier = Modifier
                 .background(Color.Gray)

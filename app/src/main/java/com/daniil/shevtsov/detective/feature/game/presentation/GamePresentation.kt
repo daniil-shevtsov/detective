@@ -12,7 +12,11 @@ fun gamePresentation(state: GameState): GameViewState {
                 "$perpetrator took $stolenObject",
             ),
             place = Slot.Set(place),
-            motive = Slot.Set("$victim took $stolenObject"),
+            motive = MotiveModel(
+                subject = Slot.Set(victim),
+                verb = Slot.Set(crimeAction),
+                objectNoun = Slot.Set(stolenObject)
+            ),
         )
     }
 
