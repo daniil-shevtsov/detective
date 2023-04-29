@@ -3,8 +3,11 @@ package com.daniil.shevtsov.detective.feature.game.ui
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.Arrangement.Absolute.spacedBy
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -13,6 +16,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.daniil.shevtsov.detective.feature.game.domain.GameAction
 import com.daniil.shevtsov.detective.feature.game.presentation.*
+import timber.log.Timber
 
 typealias OnGameAction = (action: GameAction) -> Unit
 typealias OnDrop = (slotId: Long, slottableId: Long) -> Unit
@@ -100,9 +104,13 @@ fun GameScreen(
 fun WordTray(
     state: GameViewState
 ) {
-    Row(
-        modifier = Modifier.padding(8.dp).background(Color.DarkGray).padding(4.dp),
-        horizontalArrangement = spacedBy(4.dp)
+    Column(
+        modifier = Modifier
+            .verticalScroll(rememberScrollState())
+            .padding(8.dp)
+            .background(Color.DarkGray)
+            .padding(4.dp),
+        verticalArrangement = spacedBy(4.dp)
     ) {
         state.trayWords.forEach { word ->
             TrayWord(word)
@@ -112,7 +120,9 @@ fun WordTray(
 
 @Composable
 fun TrayWord(model: SlottableModel) {
+    Timber.d("TrayWord with id ${model.id}")
     DragTarget(modifier = Modifier, dataToDrop = model.id) {
+        Timber.d("Displaying $model with ${model.id} on drag")
         Text(
             modifier = Modifier.background(Color.Gray).padding(8.dp),
             text = model.text
@@ -190,7 +200,11 @@ fun Slot(model: SlotModel, onDrop: OnDrop) {
         modifier = Modifier
     ) { isInBound, slottableId ->
         if (slottableId != null && isInBound) {
-            onDrop(model.id, slottableId)
+            Timber.d("before launched effect for ${model.id}")
+            LaunchedEffect(slottableId, isInBound) {
+                Timber.d("inside launched effect for ${model.id}")
+                onDrop(model.id, slottableId)
+            }
         }
         when (model) {
             is SlotModel.Empty -> Box(

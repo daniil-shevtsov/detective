@@ -1,6 +1,7 @@
 package com.daniil.shevtsov.detective.feature.game.domain
 
 import com.daniil.shevtsov.detective.feature.main.domain.AppState
+import timber.log.Timber
 
 fun gameFunctionalCore(
     state: AppState,
@@ -20,7 +21,9 @@ fun onSlottableDrop(state: AppState, action: GameAction.SlottableDrop): AppState
     val droppedSlottable =
         state.gameState.slottables.find { slottable -> slottable.id == action.slottableId }
 
+    Timber.d("need to update state: drop ${action.slottableId} into ${action.slotId}")
     return if (slotOfDrop != null && droppedSlottable != null) {
+        Timber.d("found slot $slotOfDrop and want to drop $droppedSlottable")
         state.copy(
             gameState = state.gameState.copy(
                 slottables = state.gameState.slottables.filter { slottable ->

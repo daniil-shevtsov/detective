@@ -30,11 +30,6 @@ fun gamePresentation(state: GameState): GameViewState {
     }
 }
 
-private fun slotFromString(value: String) = when {
-    value.isNotBlank() -> SlotModel.Set(0L, SlottableModel(0L, value))
-    else -> SlotModel.Empty(0L)
-}
-
 private fun mapSlot(value: Slot) = when {
     value.content != null -> SlotModel.Set(
         value.id,
