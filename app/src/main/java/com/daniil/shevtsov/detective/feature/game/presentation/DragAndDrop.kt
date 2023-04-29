@@ -13,7 +13,6 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.boundsInWindow
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.unit.IntSize
-import timber.log.Timber
 
 internal val LocalDragTargetInfo = compositionLocalOf { DragTargetInfo() }
 
@@ -60,7 +59,6 @@ fun <T> DragTarget(
     dataToDrop: T,
     content: @Composable (() -> Unit)
 ) {
-    Timber.d("DragTarget with id $dataToDrop")
     var currentPosition by remember { mutableStateOf(Offset.Zero) }
     val currentState = LocalDragTargetInfo.current
 
@@ -68,12 +66,9 @@ fun <T> DragTarget(
         .onGloballyPositioned {
             currentPosition = it.localToWindow(Offset.Zero)
         }
-        .pointerInput(Unit) {
-            Timber.d("inside pointerInput id $dataToDrop")
+        .pointerInput(dataToDrop) {
             detectDragGesturesAfterLongPress(onDragStart = {
-                Timber.d("inside longpress id $dataToDrop")
                 currentState.dataToDrop = dataToDrop
-                Timber.d("dragging slottable with id $dataToDrop")
                 currentState.isDragging = true
                 currentState.dragPosition = currentPosition + it
                 currentState.draggableComposable = content
