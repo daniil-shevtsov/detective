@@ -25,9 +25,9 @@ fun onSlottableDrop(state: AppState, action: GameAction.SlottableDrop): AppState
         Timber.d("found slot $slotOfDrop and want to drop $droppedSlottable")
         state.copy(
             gameState = state.gameState.copy(
-                slottables = state.gameState.slottables.filter { slottable ->
+                slottables = state.gameState.slottables/*.filter { slottable ->
                     slottable.id != droppedSlottable.id
-                },
+                }*/,
                 slots = state.gameState.slots.map { slotList ->
                     slotList.copy(
                         elements = slotList.elements.map { slot ->
