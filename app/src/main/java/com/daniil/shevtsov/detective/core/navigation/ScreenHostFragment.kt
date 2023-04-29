@@ -3,12 +3,6 @@ package com.daniil.shevtsov.detective.core.navigation
 import android.content.Context
 import android.os.Bundle
 import android.view.View
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
@@ -16,9 +10,7 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.daniil.shevtsov.detective.R
 import com.daniil.shevtsov.detective.application.DetectiveApplication
 import com.daniil.shevtsov.detective.databinding.FragmentMainBinding
-import com.daniil.shevtsov.detective.feature.game.presentation.FoodItemCard
-import com.daniil.shevtsov.detective.feature.game.presentation.LongPressDraggable
-import com.daniil.shevtsov.detective.feature.game.presentation.PersonListContainer
+import com.daniil.shevtsov.detective.feature.main.view.ScreenHostComposable
 import com.google.accompanist.insets.ProvideWindowInsets
 import javax.inject.Inject
 
@@ -46,19 +38,7 @@ class ScreenHostFragment : Fragment(R.layout.fragment_main) {
         with(binding) {
             composeView.setContent {
                 ProvideWindowInsets {
-                    LongPressDraggable(modifier = Modifier.fillMaxSize()) {
-                        LazyColumn(
-                            modifier = Modifier.fillMaxSize(),
-                            contentPadding = PaddingValues(horizontal = 10.dp)
-                        ) {
-                            items(items = foodList) { food ->
-                                FoodItemCard(foodItem = food)
-                            }
-                        }
-                        PersonListContainer()
-                    }
-//                    ScreenHostComposable(viewModel = viewModel)
-//                    DetectiveScreenComposable(imperativeShell = detectiveImperativeShell)
+                    ScreenHostComposable(viewModel = viewModel)
                 }
             }
         }

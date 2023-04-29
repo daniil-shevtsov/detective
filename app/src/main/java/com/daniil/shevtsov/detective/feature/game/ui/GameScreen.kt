@@ -121,16 +121,13 @@ fun SlotRow(
     SlotRow(title = title) {
         DropTarget<String>(
             modifier = Modifier
-                .padding(6.dp)
-                .width(width = 120.dp)
-                .height(100.dp)
         ) { isInBound, foodItem ->
-            if (foodItem != null && isInBound) {
-                Slot(Slot.Set(foodItem))
-            } else {
-                Slot.Empty
-            }
-            //Slot(slot)
+//            if (foodItem != null && isInBound) {
+//                Slot(Slot.Set(foodItem))
+//            } else {
+//                Slot.Empty
+//            }
+            Slot(slot)
         }
     }
 }
