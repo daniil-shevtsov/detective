@@ -13,7 +13,32 @@ fun gameFunctionalCore(
 }
 
 fun onSlottableDrop(state: AppState, action: GameAction.SlottableDrop): AppState {
-    return state
+    val slotOfDrop =
+        state.gameState.slots.map { slotLists ->
+            slotLists.find { slot -> slot.id == action.slotId }
+        }.filterNotNull().firstOrNull()
+    val droppedSlottable =
+        state.gameState.slottables.find { slottable -> slottable.id == action.slottableId }
+
+    return if (slotOfDrop != null && droppedSlottable != null) {
+        state.copy(
+            gameState = state.gameState.copy(
+                slottables = state.gameState.slottables.filter { slottable ->
+                    slottable.id != droppedSlottable.id
+                },
+                slots = state.gameState.slots.map { slotList ->
+                    slotList.map { slot ->
+                        when (slot.id) {
+                            slotOfDrop.id -> slot.copy(content = droppedSlottable)
+                            else -> slot
+                        }
+                    }
+                }
+            )
+        )
+    } else {
+        state
+    }
 }
 
 private fun init(state: AppState): AppState {
