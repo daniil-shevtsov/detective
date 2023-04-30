@@ -41,7 +41,12 @@ fun gamePresentation(state: GameState): GameViewState {
                     SlottableModel(id = id, text = value)
                 }
             },
-            sections = emptyList(),
+            sections = listOf(
+                FormSectionModel(title = "When", lines = listOf(FormLineModel(listOf(mapSlot(slots[0].elements[0] as Slot))))),
+                FormSectionModel(title = "Who and What", lines = emptyList()),
+                FormSectionModel(title = "Where", lines = emptyList()),
+                FormSectionModel(title = "Why", lines = emptyList()),
+            ),
         )
     }
 }

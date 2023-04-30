@@ -90,6 +90,16 @@ internal class GamePresentationKtTest {
                 prop(GameViewState::trayWords)
                     .extracting(SlottableModel::text)
                     .containsOnly("23-05-05")
+                prop(GameViewState::sections)
+                    .index(0)
+                    .all {
+                        prop(FormSectionModel::title).isEqualTo("When")
+                        prop(FormSectionModel::lines)
+                            .index(0)
+                            .prop(FormLineModel::slots)
+                            .index(0)
+                            .isSet("23-04-29")
+                    }
             }
     }
 
