@@ -48,8 +48,11 @@ internal class GameFunctionalCoreKtTest {
             state = appState(
                 gameState = gameState(
                     slottables = listOf(slottable),
-                    slots = slots(listOf(slot))
-                )
+                    slots = slots(listOf(slot)),
+                    formSections = listOf(
+                        sectionWithLines("Lol", formLine(slot))
+                    )
+                ),
             ),
             action = GameAction.SlottableDrop(slotId = slot.id, slottableId = slottable.id)
         )
@@ -71,7 +74,10 @@ internal class GameFunctionalCoreKtTest {
             state = appState(
                 gameState = gameState(
                     slottables = listOf(oldSlottable, slottable),
-                    slots = slots(listOf(slot))
+                    slots = slots(listOf(slot)),
+                    formSections = listOf(
+                        sectionWithLines("Lol", formLine(slot))
+                    )
                 )
             ),
             action = GameAction.SlottableDrop(slotId = slot.id, slottableId = slottable.id)
@@ -108,11 +114,7 @@ internal class GameFunctionalCoreKtTest {
         expectedSlotId: Long,
         expectedSlottableId: Long
     ) = given { gameState ->
-        val slot = gameState.slots.mapNotNull { formLine ->
-            formLine.elements.find { formElement ->
-                formElement is Slot && formElement.id == expectedSlotId
-            }
-        }.firstOrNull() as? Slot
+        val slot = gameState.allSlots.find { slot -> slot.id == expectedSlotId }
         val slottable =
             gameState.slottables.find { slottable -> slottable.id == expectedSlottableId }
 

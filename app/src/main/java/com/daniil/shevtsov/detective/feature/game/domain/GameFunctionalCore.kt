@@ -13,18 +13,14 @@ fun gameFunctionalCore(
 }
 
 fun onSlottableDrop(state: AppState, action: GameAction.SlottableDrop): AppState {
-    val slotOfDrop = state.gameState.slots.map { slotLists ->
-        slotLists.elements.find { slot -> slot is Slot && slot.id == action.slotId }
-    }.filterNotNull().firstOrNull() as? Slot
+    val slotOfDrop = state.gameState.allSlots.find { slot -> slot.id == action.slotId }
     val droppedSlottable =
         state.gameState.slottables.find { slottable -> slottable.id == action.slottableId }
 
     return if (slotOfDrop != null && droppedSlottable != null) {
         state.copy(
             gameState = state.gameState.copy(
-                slottables = state.gameState.slottables/*.filter { slottable ->
-                    slottable.id != droppedSlottable.id
-                }*/,
+                slottables = state.gameState.slottables,
                 slots = state.gameState.slots.map { slotList ->
                     slotList.copy(
                         elements = slotList.elements.map { slot ->
@@ -38,7 +34,21 @@ fun onSlottableDrop(state: AppState, action: GameAction.SlottableDrop): AppState
 
                         }
                     )
-
+                },
+                formSections = state.gameState.formSections.map { formSection ->
+                    formSection.copy(
+                        formLines = formSection.formLines.map { formLine ->
+                            formLine.copy(elements = formLine.elements.map { element ->
+                                when (element) {
+                                    is Slot -> when (element.id) {
+                                        slotOfDrop.id -> element.copy(content = droppedSlottable)
+                                        else -> element
+                                    }
+                                    else -> element
+                                }
+                            })
+                        }
+                    )
                 }
             )
         )
