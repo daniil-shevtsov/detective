@@ -34,7 +34,8 @@ fun GameScreenEmptyPreview() {
                 verb = emptySlotModel(),
                 objectNoun = emptySlotModel(),
             ),
-            trayWords = emptyList()
+            trayWords = emptyList(),
+            sections = emptyList(),
         ),
         onAction = {}
     )
@@ -86,6 +87,9 @@ fun GameScreenPreview() {
                 slottableModel("Jane Doe"),
                 slottableModel("stole"),
                 slottableModel("cheburek")
+            ),
+            sections = listOf(
+
             )
         ),
         onAction = {}
@@ -147,7 +151,11 @@ fun FillInForm(
 ) {
     Column(modifier = Modifier.background(Color.Gray), verticalArrangement = spacedBy(4.dp)) {
         with(state) {
-            FormSection(title = "When", lines = listOf(FormLineModel(listOf(state.time))), onDrop = onDrop)
+            FormSection(
+                title = "When",
+                lines = listOf(FormLineModel(listOf(state.time))),
+                onDrop = onDrop
+            )
             FormSection(
                 title = "Who and What:",
                 lines = state.events,

@@ -6,6 +6,7 @@ data class GameViewState(
     val place: SlotModel,
     val motive: MotiveModel,
     val trayWords: List<SlottableModel>,
+    val sections: List<FormSectionModel>,
 )
 
 

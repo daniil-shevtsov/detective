@@ -6,7 +6,7 @@ import com.daniil.shevtsov.detective.feature.game.domain.GameState
 import com.daniil.shevtsov.detective.feature.game.domain.Slot
 
 fun gamePresentation(state: GameState): GameViewState {
-    if(state.slots.size < 3) {
+    if (state.slots.size < 3) {
         return GameViewState(
             time = SlotModel.Empty(0L),
             events = emptyList(),
@@ -17,6 +17,7 @@ fun gamePresentation(state: GameState): GameViewState {
                 objectNoun = SlotModel.Empty(0L),
             ),
             trayWords = emptyList(),
+            sections = emptyList(),
         )
     }
 
@@ -34,7 +35,8 @@ fun gamePresentation(state: GameState): GameViewState {
                 with(slottable) {
                     SlottableModel(id = id, text = value)
                 }
-            }
+            },
+            sections = emptyList(),
         )
     }
 }
