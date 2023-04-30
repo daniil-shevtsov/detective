@@ -66,7 +66,38 @@ internal class GamePresentationKtTest {
                     )
                 ),
                 formSections = listOf(
-                    formSection(title = "When", formLines = listOf(formLine(listOf(slot(content = slottable(value = "23-04-29"))))))
+                    formSection(
+                        title = "When",
+                        formLines = listOf(formLine(listOf(slot(content = slottable(value = "23-04-29")))))
+                    ),
+                    formSection(
+                        title = "Where",
+                        formLines = listOf(formLine(listOf(slot(content = slottable(value = "Apartment no. 34 of 246 Green Street")))))
+                    ),
+                    formSection(
+                        title = "Who and What", formLines = listOf(
+                            formLine(
+                                listOf(
+                                    slot(content = slottable(value = "John Doe")),
+                                    slot(content = slottable(value = "shot")),
+                                    slot(content = slottable(value = "John Smith")),
+                                    formText(value = "with"),
+                                    slot(content = slottable(value = ".44 revolver")),
+                                )
+                            )
+                        )
+                    ),
+                    formSection(
+                        title = "Why", formLines = listOf(
+                            formLine(
+                                listOf(
+                                    slot(content = slottable(value = "John Smith")),
+                                    slot(content = slottable(value = "took")),
+                                    slot(content = slottable(value = "golden idol")),
+                                )
+                            )
+                        )
+                    ),
                 )
             )
         )
@@ -94,14 +125,51 @@ internal class GamePresentationKtTest {
                     .extracting(SlottableModel::text)
                     .containsOnly("23-05-05")
                 prop(GameViewState::sections)
-                    .index(0)
                     .all {
-                        prop(FormSectionModel::title).isEqualTo("When")
-                        prop(FormSectionModel::lines)
-                            .index(0)
-                            .prop(FormLineModel::slots)
-                            .index(0)
-                            .isSet("23-04-29")
+                        index(0)
+                            .all {
+                                prop(FormSectionModel::title).isEqualTo("When")
+                                prop(FormSectionModel::lines)
+                                    .index(0)
+                                    .prop(FormLineModel::slots)
+                                    .index(0)
+                                    .isSet("23-04-29")
+                            }
+                        index(1)
+                            .all {
+                                prop(FormSectionModel::title).isEqualTo("Where")
+                                prop(FormSectionModel::lines)
+                                    .index(0)
+                                    .prop(FormLineModel::slots)
+                                    .index(0)
+                                    .isSet("Apartment no. 34 of 246 Green Street")
+                            }
+                        index(2)
+                            .all {
+                                prop(FormSectionModel::title).isEqualTo("Who and What")
+                                prop(FormSectionModel::lines)
+                                    .index(0)
+                                    .prop(FormLineModel::slots)
+                                    .all {
+                                        index(0).isSet("John Doe")
+                                        index(1).isSet("shot")
+                                        index(2).isSet("John Smith")
+                                        index(3).isText("with")
+                                        index(4).isSet(".44 revolver")
+                                    }
+                            }
+                        index(3)
+                            .all {
+                                prop(FormSectionModel::title).isEqualTo("Why")
+                                prop(FormSectionModel::lines)
+                                    .index(0)
+                                    .prop(FormLineModel::slots)
+                                    .all {
+                                        index(0).isSet("John Smith")
+                                        index(1).isSet("took")
+                                        index(2).isSet("golden idol")
+                                    }
+                            }
                     }
             }
     }
