@@ -64,6 +64,9 @@ internal class GamePresentationKtTest {
                         value = "23-05-05",
                         type = SlottableType.Time
                     )
+                ),
+                formSections = listOf(
+                    formSection(title = "When", formLines = listOf(formLine(listOf(slot(content = slottable(value = "23-04-29"))))))
                 )
             )
         )
