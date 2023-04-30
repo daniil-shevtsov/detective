@@ -3,7 +3,9 @@ package com.daniil.shevtsov.detective.feature.game.domain
 import assertk.Assert
 import assertk.all
 import assertk.assertThat
-import assertk.assertions.*
+import assertk.assertions.containsExactly
+import assertk.assertions.isEqualTo
+import assertk.assertions.prop
 import assertk.assertions.support.expected
 import com.daniil.shevtsov.detective.feature.main.domain.AppState
 import com.daniil.shevtsov.detective.feature.main.domain.appState
@@ -77,13 +79,7 @@ internal class GameFunctionalCoreKtTest {
         assertThat(state)
             .prop(AppState::gameState)
             .all {
-                prop(GameState::slots)
-                    .index(0)
-                    .prop(FormLine::elements)
-                    .index(0)
-                    .isInstanceOf(Slot::class)
-                    .prop(Slot::content)
-                    .isEqualTo(slottable)
+                slotHasSlottable(expectedSlotId = slot.id, expectedSlottableId = slottable.id)
                 prop(GameState::slottables).containsExactly(oldSlottable, slottable)
             }
     }
