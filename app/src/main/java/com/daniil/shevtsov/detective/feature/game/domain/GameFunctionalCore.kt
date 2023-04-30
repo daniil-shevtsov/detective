@@ -21,20 +21,6 @@ fun onSlottableDrop(state: AppState, action: GameAction.SlottableDrop): AppState
         state.copy(
             gameState = state.gameState.copy(
                 slottables = state.gameState.slottables,
-                slots = state.gameState.slots.map { slotList ->
-                    slotList.copy(
-                        elements = slotList.elements.map { slot ->
-                            when (slot) {
-                                is Slot -> when (slot.id) {
-                                    slotOfDrop.id -> slot.copy(content = droppedSlottable)
-                                    else -> slot
-                                }
-                                else -> slot
-                            }
-
-                        }
-                    )
-                },
                 formSections = state.gameState.formSections.map { formSection ->
                     formSection.copy(
                         formLines = formSection.formLines.map { formLine ->
@@ -138,7 +124,6 @@ private fun init(state: AppState): AppState {
                 type = SlottableType.Noun,
             ),
         ),
-        slots = emptyList(),
     )
     var idCounter = 0L
     return state.copy(

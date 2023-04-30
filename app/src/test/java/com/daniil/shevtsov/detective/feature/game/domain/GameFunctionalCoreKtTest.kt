@@ -48,7 +48,6 @@ internal class GameFunctionalCoreKtTest {
             state = appState(
                 gameState = gameState(
                     slottables = listOf(slottable),
-                    slots = slots(listOf(slot)),
                     formSections = listOf(
                         sectionWithLines("Lol", formLine(slot))
                     )
@@ -74,7 +73,6 @@ internal class GameFunctionalCoreKtTest {
             state = appState(
                 gameState = gameState(
                     slottables = listOf(oldSlottable, slottable),
-                    slots = slots(listOf(slot)),
                     formSections = listOf(
                         sectionWithLines("Lol", formLine(slot))
                     )

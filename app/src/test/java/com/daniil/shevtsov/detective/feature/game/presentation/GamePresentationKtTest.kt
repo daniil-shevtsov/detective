@@ -23,26 +23,6 @@ internal class GamePresentationKtTest {
     fun `should create set state`() {
         val viewState = gamePresentation(
             state = gameState(
-                slots = listOf(
-                    formLine(listOf(slot(content = slottable(value = "23-04-29")))),
-                    formLine(listOf(slot(content = slottable(value = "Apartment no. 34 of 246 Green Street")))),
-                    formLine(
-                        listOf(
-                            slot(content = slottable(value = "John Smith")),
-                            slot(content = slottable(value = "took")),
-                            slot(content = slottable(value = "golden idol")),
-                        )
-                    ),
-                    formLine(
-                        listOf(
-                            slot(content = slottable(value = "John Doe")),
-                            slot(content = slottable(value = "shot")),
-                            slot(content = slottable(value = "John Smith")),
-                            formText(value = "with"),
-                            slot(content = slottable(value = ".44 revolver")),
-                        )
-                    ),
-                ),
                 slottables = listOf(
                     slottable(
                         id = 1L,
