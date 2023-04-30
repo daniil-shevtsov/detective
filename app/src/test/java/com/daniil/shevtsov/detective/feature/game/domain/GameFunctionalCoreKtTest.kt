@@ -23,16 +23,20 @@ internal class GameFunctionalCoreKtTest {
                 prop(GameState::slottables).any {
                     it.prop(Slottable::value).isEqualTo("John Doe")
                 }
-                prop(GameState::formSections).any {
-                    it.prop(FormSection::title).isEqualTo("When")
-                    it.prop(FormSection::formLines)
-                        .index(0)
-                        .prop(FormLine::elements)
-                        .index(0)
-                        .isInstanceOf(Slot::class)
-                        .prop(Slot::content)
-                        .isNull()
-                }
+                prop(GameState::formSections)
+                    .all {
+                        allIdsAreUnique()
+                        any {
+                            it.prop(FormSection::title).isEqualTo("When")
+                            it.prop(FormSection::formLines)
+                                .index(0)
+                                .prop(FormLine::elements)
+                                .index(0)
+                                .isInstanceOf(Slot::class)
+                                .prop(Slot::content)
+                                .isNull()
+                        }
+                    }
             }
     }
 
@@ -79,6 +83,25 @@ internal class GameFunctionalCoreKtTest {
                 slotHasSlottable(expectedSlotId = slot.id, expectedSlottableId = slottable.id)
                 prop(GameState::slottables).containsExactly(oldSlottable, slottable)
             }
+    }
+
+    private fun Assert<List<FormSection>>.allIdsAreUnique() = given { formSections ->
+        val allSlots = formSections.flatMap {
+            it.formLines.flatMap {
+                it.elements.filterIsInstance<Slot>()
+            }
+        }
+        val ids = allSlots.map { it.id }
+
+        val duplicateIds = ids.filter { id -> ids.count { it == id } > 1 }.toSet()
+
+        if (duplicateIds.isEmpty()) {
+            return@given
+        }
+
+        val duplicates = allSlots.filter { it.id in duplicateIds }
+
+        expected(message = "expected all ids to be unique but there are duplicates:$duplicates")
     }
 
     private fun Assert<GameState>.slotHasSlottable(
