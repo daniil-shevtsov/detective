@@ -17,12 +17,7 @@ fun gamePresentation(state: GameState): GameViewState {
                 objectNoun = SlotModel.Empty(0L),
             ),
             trayWords = emptyList(),
-            sections = listOf(
-                FormSectionModel(title = "When", lines = emptyList()),
-                FormSectionModel(title = "Who and What", lines = emptyList()),
-                FormSectionModel(title = "Where", lines = emptyList()),
-                FormSectionModel(title = "Why", lines = emptyList()),
-            ),
+            sections = emptyList(),
         )
     }
 
@@ -41,25 +36,13 @@ fun gamePresentation(state: GameState): GameViewState {
                     SlottableModel(id = id, text = value)
                 }
             },
-            sections = if (state.formSections.isEmpty()) {
-                listOf(
-                    FormSectionModel(
-                        title = "When",
-                        lines = listOf(FormLineModel(listOf(mapSlot(slots[0].elements[0] as Slot))))
-                    ),
-                    FormSectionModel(title = "Who and What", lines = emptyList()),
-                    FormSectionModel(title = "Where", lines = emptyList()),
-                    FormSectionModel(title = "Why", lines = emptyList()),
+            sections = state.formSections.map { formSection ->
+                FormSectionModel(
+                    title = formSection.title,
+                    lines = formSection.formLines.map { formLine ->
+                        FormLineModel(slots = formLine.elements.map { mapSlot(it) })
+                    }
                 )
-            } else {
-                state.formSections.map { formSection ->
-                    FormSectionModel(
-                        title = formSection.title,
-                        lines = formSection.formLines.map { formLine ->
-                            FormLineModel(slots = formLine.elements.map { mapSlot(it) })
-                        }
-                    )
-                }
             },
         )
     }
