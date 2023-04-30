@@ -147,15 +147,44 @@ fun FillInForm(
 ) {
     Column(modifier = Modifier.background(Color.Gray), verticalArrangement = spacedBy(4.dp)) {
         with(state) {
-            SlotRow(title = "When", slot = state.time, onDrop = onDrop)
-            Text("Who and What:")
-            state.events.forEach { event ->
-                FormLine(event, onDrop)
-            }
+            FormSection(title = "When", lines = listOf(FormLineModel(listOf(state.time))), onDrop = onDrop)
+            FormSection(
+                title = "Who and What:",
+                lines = state.events,
+                onDrop = onDrop,
+            )
             SlotRow(title = "Where", slot = state.place, onDrop = onDrop)
             SlotRow(title = "Why") {
                 Motive(motive, onDrop)
             }
+        }
+    }
+}
+
+@Composable
+fun FormSection(
+    title: String,
+    lines: List<FormLineModel>,
+    onDrop: OnDrop,
+) {
+    if (lines.size > 1) {
+        Column(
+            modifier = Modifier.background(Color.Gray),
+            verticalArrangement = spacedBy(4.dp)
+        ) {
+            Text(title)
+            lines.forEach { line ->
+                FormLine(line, onDrop)
+            }
+        }
+    } else if (lines.size == 1) {
+        Row(
+            modifier = Modifier.background(Color.Gray),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = spacedBy(4.dp)
+        ) {
+            Text(title)
+            FormLine(lines[0], onDrop)
         }
     }
 }

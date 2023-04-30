@@ -50,6 +50,7 @@ fun onSlottableDrop(state: AppState, action: GameAction.SlottableDrop): AppState
 private fun init(state: AppState): AppState {
     return state.copy(
         gameState = GameState(
+            formSections = emptyList(),
             slottables = listOf(
                 Slottable(
                     id = 0L,
