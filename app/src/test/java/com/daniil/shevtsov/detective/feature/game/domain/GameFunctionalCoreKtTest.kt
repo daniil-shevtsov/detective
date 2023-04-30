@@ -23,10 +23,15 @@ internal class GameFunctionalCoreKtTest {
                 prop(GameState::slottables).any {
                     it.prop(Slottable::value).isEqualTo("John Doe")
                 }
-                prop(GameState::slots).any {
-                    it.prop(FormLine::elements).any {
-                        it.isInstanceOf(Slot::class).prop(Slot::content).isNull()
-                    }
+                prop(GameState::formSections).any {
+                    it.prop(FormSection::title).isEqualTo("When")
+                    it.prop(FormSection::formLines)
+                        .index(0)
+                        .prop(FormLine::elements)
+                        .index(0)
+                        .isInstanceOf(Slot::class)
+                        .prop(Slot::content)
+                        .isNull()
                 }
             }
     }

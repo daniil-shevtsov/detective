@@ -50,7 +50,38 @@ fun onSlottableDrop(state: AppState, action: GameAction.SlottableDrop): AppState
 private fun init(state: AppState): AppState {
     return state.copy(
         gameState = GameState(
-            formSections = emptyList(),
+            formSections = listOf(
+                sectionWithEmptySlot(title = "When", type = SlottableType.Time),
+                sectionWithEmptySlot(title = "Where", type = SlottableType.Place),
+                sectionWithLines(
+                    title = "Who and What",
+                    formLine(
+                        emptySlotOf(type = SlottableType.Person),
+                        emptySlotOf(type = SlottableType.Verb),
+                        emptySlotOf(SlottableType.Person),
+                        FormText("with"),
+                        emptySlotOf(type = SlottableType.Noun),
+                    ),
+                    formLine(
+                        Slot(id = 9L, content = null, type = SlottableType.Person),
+                        FormText("died of"),
+                        Slot(id = 10L, content = null, type = SlottableType.Noun),
+                    ),
+                    formLine(
+                        Slot(id = 11L, content = null, type = SlottableType.Person),
+                        Slot(id = 12L, content = null, type = SlottableType.Verb),
+                        Slot(id = 13L, content = null, type = SlottableType.Noun),
+                    ),
+                ),
+                sectionWithOneLine(
+                    title = "Why",
+                    line = formLine(
+                        emptySlotOf(type = SlottableType.Person),
+                        emptySlotOf(type = SlottableType.Verb),
+                        emptySlotOf(type = SlottableType.Noun),
+                    )
+                ),
+            ),
             slottables = listOf(
                 Slottable(
                     id = 0L,
@@ -98,40 +129,27 @@ private fun init(state: AppState): AppState {
                     type = SlottableType.Noun,
                 ),
             ),
-            slots = listOf(
-                FormLine(listOf(Slot(id = 0L, content = null, type = SlottableType.Time))),
-                FormLine(listOf(Slot(id = 1L, content = null, type = SlottableType.Place))),
-                FormLine(
-                    listOf(
-                        Slot(id = 2L, content = null, type = SlottableType.Person),
-                        Slot(id = 3L, content = null, type = SlottableType.Verb),
-                        Slot(id = 4L, content = null, type = SlottableType.Noun),
-                    )
-                ),
-                FormLine(
-                    listOf(
-                        Slot(id = 5L, content = null, type = SlottableType.Person),
-                        Slot(id = 6L, content = null, type = SlottableType.Verb),
-                        Slot(id = 7L, content = null, type = SlottableType.Person),
-                        FormText("with"),
-                        Slot(id = 8L, content = null, type = SlottableType.Noun),
-                    )
-                ),
-                FormLine(
-                    listOf(
-                        Slot(id = 9L, content = null, type = SlottableType.Person),
-                        FormText("died of"),
-                        Slot(id = 10L, content = null, type = SlottableType.Noun),
-                    )
-                ),
-                FormLine(
-                    listOf(
-                        Slot(id = 11L, content = null, type = SlottableType.Person),
-                        Slot(id = 12L, content = null, type = SlottableType.Verb),
-                        Slot(id = 13L, content = null, type = SlottableType.Noun),
-                    )
-                ),
-            )
+            slots = emptyList(),
         )
     )
 }
+
+fun formLine(vararg elements: FormElement) = FormLine(elements = elements.toList())
+
+fun sectionWithOneLine(title: String, line: FormLine): FormSection = FormSection(
+    title = title,
+    formLines = listOf(line),
+)
+
+fun sectionWithLines(title: String, vararg lines: FormLine) = FormSection(
+    title = title,
+    formLines = lines.toList(),
+)
+
+private fun sectionWithEmptySlot(title: String, type: SlottableType) = sectionWithOneLine(
+    title = title,
+    line = FormLine(listOf(emptySlotOf(type)))
+)
+
+private fun lineWithEmptySlotOf(type: SlottableType) = FormLine(listOf(emptySlotOf(type)))
+private fun emptySlotOf(type: SlottableType) = Slot(id = -1L, content = null, type = type)

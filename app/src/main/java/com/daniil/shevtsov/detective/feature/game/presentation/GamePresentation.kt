@@ -6,13 +6,6 @@ import com.daniil.shevtsov.detective.feature.game.domain.GameState
 import com.daniil.shevtsov.detective.feature.game.domain.Slot
 
 fun gamePresentation(state: GameState): GameViewState {
-    if (state.slots.size < 3) {
-        return GameViewState(
-            trayWords = emptyList(),
-            sections = emptyList(),
-        )
-    }
-
     return with(state) {
         GameViewState(
             trayWords = slottables.map { slottable ->
