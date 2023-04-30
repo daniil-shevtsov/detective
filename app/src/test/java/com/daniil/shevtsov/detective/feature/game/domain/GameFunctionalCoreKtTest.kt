@@ -59,7 +59,7 @@ internal class GameFunctionalCoreKtTest {
                     .isInstanceOf(Slot::class)
                     .prop(Slot::content)
                     .isEqualTo(slottable)
-                prop(GameState::slottables).isEmpty()
+                prop(GameState::slottables).containsExactly(slottable)
             }
     }
 
