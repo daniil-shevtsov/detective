@@ -17,7 +17,12 @@ fun gamePresentation(state: GameState): GameViewState {
                 objectNoun = SlotModel.Empty(0L),
             ),
             trayWords = emptyList(),
-            sections = emptyList(),
+            sections = listOf(
+                FormSectionModel(title = "When", lines = emptyList()),
+                FormSectionModel(title = "Who and What", lines = emptyList()),
+                FormSectionModel(title = "Where", lines = emptyList()),
+                FormSectionModel(title = "Why", lines = emptyList()),
+            ),
         )
     }
 

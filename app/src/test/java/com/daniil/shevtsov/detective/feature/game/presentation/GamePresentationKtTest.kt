@@ -23,6 +23,14 @@ internal class GamePresentationKtTest {
                     prop(MotiveModel::verb).isEmpty()
                     prop(MotiveModel::objectNoun).isEmpty()
                 }
+                prop(GameViewState::sections)
+                    .extracting(FormSectionModel::title)
+                    .containsExactly(
+                        "When",
+                        "Who and What",
+                        "Where",
+                        "Why",
+                    )
             }
     }
 
