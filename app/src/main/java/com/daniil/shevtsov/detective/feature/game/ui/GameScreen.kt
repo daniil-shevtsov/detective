@@ -23,73 +23,54 @@ typealias OnDrop = (slotId: Long, slottableId: Long) -> Unit
 
 @Preview
 @Composable
-fun GameScreenEmptyPreview() {
-    GameScreen(
-        state = GameViewState(
-            time = emptySlotModel(),
-            events = emptyList(),
-            place = emptySlotModel(),
-            motive = MotiveModel(
-                subject = emptySlotModel(),
-                verb = emptySlotModel(),
-                objectNoun = emptySlotModel(),
-            ),
-            trayWords = emptyList(),
-            sections = emptyList(),
-        ),
-        onAction = {}
-    )
-}
-
-private fun slottableModel(text: String) = SlottableModel(
-    id = 0L,
-    text = text,
-)
-
-private fun emptySlotModel() = SlotModel.Empty(id = 0L)
-
-private fun slotModel(text: String) = SlotModel.Set(
-    id = 0L,
-    value = SlottableModel(
-        id = 0L,
-        text = text,
-    )
-)
-
-private fun slotText(text: String) = SlotModel.Text(0L, text)
-
-@Preview
-@Composable
 fun GameScreenPreview() {
     GameScreen(
         state = GameViewState(
-            time = slotModel("23-04-29"),
-            events = listOf(
-                FormLineModel(
-                    listOf(
-                        slotModel("John Doe"),
-                        slotModel("shot"),
-                        slotModel("John Smith"),
-                        slotText("with"),
-                        slotModel(".44 revolver"),
-                    )
-                ),
-                FormLineModel(listOf(slotModel("John Smith died of Gunshot Wound"))),
-                FormLineModel(listOf(slotModel("John Doe took golden idol"))),
-            ),
-            place = slotModel("Apartment no. 34 of 246 Green Street"),
-            motive = MotiveModel(
-                subject = slotModel("John Smith"),
-                verb = slotModel("took"),
-                objectNoun = slotModel("golden idol")
-            ),
             trayWords = listOf(
                 slottableModel("Jane Doe"),
                 slottableModel("stole"),
                 slottableModel("cheburek")
             ),
             sections = listOf(
-
+                oneElementSection(title = "When", value = "23-04-29"),
+                oneElementSection(title = "Where", value = "Apartment no. 34 of 246 Green Street"),
+                formSectionModel(
+                    title = "Who and What", lines = listOf(
+                        formLineModel(
+                            listOf(
+                                slotModel("John Doe"),
+                                slotModel("shot"),
+                                slotModel("John Smith"),
+                                slotText("with"),
+                                slotModel(".44 revolver"),
+                            )
+                        ),
+                        formLineModel(
+                            listOf(
+                                slotModel("John Doe"),
+                                slotModel("died"),
+                                slotText("of"),
+                                slotModel("gunshot wound"),
+                            )
+                        ),
+                        formLineModel(
+                            listOf(
+                                slotModel("John Doe"),
+                                slotModel("took"),
+                                slotModel("golden idol")
+                            )
+                        ),
+                    )
+                ),
+                oneLineSection(
+                    title = "Why", line = formLineModel(
+                        listOf(
+                            slotModel("John Smith"),
+                            slotModel("took"),
+                            slotModel("golden idol")
+                        )
+                    )
+                ),
             )
         ),
         onAction = {}
@@ -151,19 +132,12 @@ fun FillInForm(
 ) {
     Column(modifier = Modifier.background(Color.Gray), verticalArrangement = spacedBy(4.dp)) {
         with(state) {
-            FormSection(
-                title = "When",
-                lines = listOf(FormLineModel(listOf(state.time))),
-                onDrop = onDrop
-            )
-            FormSection(
-                title = "Who and What:",
-                lines = state.events,
-                onDrop = onDrop,
-            )
-            SlotRow(title = "Where", slot = state.place, onDrop = onDrop)
-            SlotRow(title = "Why") {
-                Motive(motive, onDrop)
+            sections.forEach { section ->
+                FormSection(
+                    title = section.title,
+                    lines = section.lines,
+                    onDrop = onDrop
+                )
             }
         }
     }
@@ -301,3 +275,37 @@ fun Slot(model: SlotModel, onDrop: OnDrop) {
         }
     }
 }
+
+private fun slottableModel(text: String) = SlottableModel(
+    id = 0L,
+    text = text,
+)
+
+private fun emptySlotModel() = SlotModel.Empty(id = 0L)
+
+private fun oneElementLine(element: SlotModel) = formLineModel(elements = listOf(element))
+
+private fun oneElementSection(title: String, value: String) = oneLineSection(
+    title = title,
+    line = oneElementLine(slotModel(value))
+)
+
+private fun oneLineSection(title: String, line: FormLineModel) = formSectionModel(
+    title = title,
+    lines = listOf(line)
+)
+
+private fun formLineModel(elements: List<SlotModel>) = FormLineModel(elements)
+
+private fun formSectionModel(title: String, lines: List<FormLineModel> = emptyList()) =
+    FormSectionModel(title = title, lines = lines)
+
+private fun slotModel(text: String) = SlotModel.Set(
+    id = 0L,
+    value = SlottableModel(
+        id = 0L,
+        text = text,
+    )
+)
+
+private fun slotText(text: String) = SlotModel.Text(0L, text)

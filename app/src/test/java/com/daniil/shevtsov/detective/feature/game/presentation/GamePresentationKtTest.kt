@@ -15,14 +15,6 @@ internal class GamePresentationKtTest {
         )
         assertThat(viewState)
             .all {
-                prop(GameViewState::time).isEmpty()
-                prop(GameViewState::events).isEmpty()
-                prop(GameViewState::place).isEmpty()
-                prop(GameViewState::motive).all {
-                    prop(MotiveModel::subject).isEmpty()
-                    prop(MotiveModel::verb).isEmpty()
-                    prop(MotiveModel::objectNoun).isEmpty()
-                }
                 prop(GameViewState::sections).isEmpty()
             }
     }
@@ -96,24 +88,6 @@ internal class GamePresentationKtTest {
         )
         assertThat(viewState)
             .all {
-                prop(GameViewState::time).isSet("23-04-29")
-                prop(GameViewState::events)
-                    .extracting(FormLineModel::slots)
-                    .all {
-                        index(0).all {
-                            index(0).isSet("John Doe")
-                            index(1).isSet("shot")
-                            index(2).isSet("John Smith")
-                            index(3).isText("with")
-                            index(4).isSet(".44 revolver")
-                        }
-                    }
-                prop(GameViewState::place).isSet("Apartment no. 34 of 246 Green Street")
-                prop(GameViewState::motive).all {
-                    prop(MotiveModel::subject).isSet("John Smith")
-                    prop(MotiveModel::verb).isSet("took")
-                    prop(MotiveModel::objectNoun).isSet("golden idol")
-                }
                 prop(GameViewState::trayWords)
                     .extracting(SlottableModel::text)
                     .containsOnly("23-05-05")
