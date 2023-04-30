@@ -4,9 +4,7 @@ import assertk.Assert
 import assertk.all
 import assertk.assertThat
 import assertk.assertions.*
-import com.daniil.shevtsov.detective.feature.game.domain.SlottableType
-import com.daniil.shevtsov.detective.feature.game.domain.gameState
-import com.daniil.shevtsov.detective.feature.game.domain.slottable
+import com.daniil.shevtsov.detective.feature.game.domain.*
 import org.junit.jupiter.api.Test
 
 internal class GamePresentationKtTest {
@@ -42,6 +40,26 @@ internal class GamePresentationKtTest {
                 crimeAction = "took",
                 stolenObject = "golden idol",
                 motive = "took thee golden idol",
+                slots = listOf(
+                    formLine(listOf(slot(content = slottable(value = "23-04-29")))),
+                    formLine(listOf(slot(content = slottable(value = "Apartment no. 34 of 246 Green Street")))),
+                    formLine(
+                        listOf(
+                            slot(content = slottable(value = "John Smith")),
+                            slot(content = slottable(value = "took")),
+                            slot(content = slottable(value = "golden idol")),
+                        )
+                    ),
+                    formLine(
+                        listOf(
+                            slot(content = slottable(value = "John Doe")),
+                            slot(content = slottable(value = "shot")),
+                            slot(content = slottable(value = "John Smith")),
+                            formText(value = "with"),
+                            slot(content = slottable(value = ".44 revolver")),
+                        )
+                    ),
+                ),
                 slottables = listOf(
                     slottable(
                         id = 1L,
@@ -54,11 +72,17 @@ internal class GamePresentationKtTest {
         assertThat(viewState)
             .all {
                 prop(GameViewState::time).isSet("23-04-29")
-                prop(GameViewState::events).containsExactly(
-                    "John Doe shot John Smith with .44 revolver",
-                    "John Smith died of Gunshot Wound",
-                    "John Doe took golden idol",
-                )
+                prop(GameViewState::events)
+                    .extracting(FormLineModel::slots)
+                    .all {
+                        index(0).all {
+                            index(0).isSet("John Doe")
+                            index(1).isSet("shot")
+                            index(2).isSet("John Smith")
+                            index(3).isText("with")
+                            index(4).isSet(".44 revolver")
+                        }
+                    }
                 prop(GameViewState::place).isSet("Apartment no. 34 of 246 Green Street")
                 prop(GameViewState::motive).all {
                     prop(MotiveModel::subject).isSet("John Smith")
@@ -72,9 +96,12 @@ internal class GamePresentationKtTest {
     }
 
     private fun Assert<SlotModel>.isEmpty() = isInstanceOf(SlotModel.Empty::class)
-    private fun Assert<SlotModel>.isSet(expected: String) =
-        isInstanceOf(SlotModel.Set::class)
-            .prop(SlotModel.Set::value)
-            .prop(SlottableModel::text)
-            .isEqualTo(expected)
+    private fun Assert<SlotModel>.isSet(expected: String) = isInstanceOf(SlotModel.Set::class)
+        .prop(SlotModel.Set::value)
+        .prop(SlottableModel::text)
+        .isEqualTo(expected)
+
+    private fun Assert<SlotModel>.isText(expected: String) = isInstanceOf(SlotModel.Text::class)
+        .prop(SlotModel.Text::text)
+        .isEqualTo(expected)
 }

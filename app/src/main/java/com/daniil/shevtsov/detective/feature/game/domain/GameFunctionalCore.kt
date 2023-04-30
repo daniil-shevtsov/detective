@@ -1,7 +1,6 @@
 package com.daniil.shevtsov.detective.feature.game.domain
 
 import com.daniil.shevtsov.detective.feature.main.domain.AppState
-import timber.log.Timber
 
 fun gameFunctionalCore(
     state: AppState,
@@ -20,9 +19,7 @@ fun onSlottableDrop(state: AppState, action: GameAction.SlottableDrop): AppState
     val droppedSlottable =
         state.gameState.slottables.find { slottable -> slottable.id == action.slottableId }
 
-    Timber.d("need to update state: drop ${action.slottableId} into ${action.slotId}")
     return if (slotOfDrop != null && droppedSlottable != null) {
-        Timber.d("found slot $slotOfDrop and want to drop $droppedSlottable")
         state.copy(
             gameState = state.gameState.copy(
                 slottables = state.gameState.slottables/*.filter { slottable ->
@@ -115,6 +112,13 @@ private fun init(state: AppState): AppState {
                 FormLine(listOf(Slot(id = 1L, content = null, type = SlottableType.Place))),
                 FormLine(
                     listOf(
+                        Slot(id = 2L, content = null, type = SlottableType.Person),
+                        Slot(id = 3L, content = null, type = SlottableType.Verb),
+                        Slot(id = 4L, content = null, type = SlottableType.Noun),
+                    )
+                ),
+                FormLine(
+                    listOf(
                         Slot(id = 5L, content = null, type = SlottableType.Person),
                         Slot(id = 6L, content = null, type = SlottableType.Verb),
                         Slot(id = 7L, content = null, type = SlottableType.Person),
@@ -134,13 +138,6 @@ private fun init(state: AppState): AppState {
                         Slot(id = 11L, content = null, type = SlottableType.Person),
                         Slot(id = 12L, content = null, type = SlottableType.Verb),
                         Slot(id = 13L, content = null, type = SlottableType.Noun),
-                    )
-                ),
-                FormLine(
-                    listOf(
-                        Slot(id = 2L, content = null, type = SlottableType.Person),
-                        Slot(id = 3L, content = null, type = SlottableType.Verb),
-                        Slot(id = 4L, content = null, type = SlottableType.Noun),
                     )
                 ),
             )
