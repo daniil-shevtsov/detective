@@ -12,7 +12,9 @@ import org.junit.jupiter.api.Test
 internal class GamePresentationKtTest {
     @Test
     fun `should create initial state`() {
-        val viewState = gamePresentation(state = gameState())
+        val viewState = gamePresentation(
+            state = gameState()
+        )
         assertThat(viewState)
             .all {
                 prop(GameViewState::time).isEmpty()

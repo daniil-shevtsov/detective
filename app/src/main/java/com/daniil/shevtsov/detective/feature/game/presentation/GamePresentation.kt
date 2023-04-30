@@ -6,6 +6,20 @@ import com.daniil.shevtsov.detective.feature.game.domain.GameState
 import com.daniil.shevtsov.detective.feature.game.domain.Slot
 
 fun gamePresentation(state: GameState): GameViewState {
+    if(state.slots.size < 6) {
+        return GameViewState(
+            time = SlotModel.Empty(0L),
+            events = emptyList(),
+            place = SlotModel.Empty(0L),
+            motive = MotiveModel(
+                subject = SlotModel.Empty(0L),
+                verb = SlotModel.Empty(0L),
+                objectNoun = SlotModel.Empty(0L),
+            ),
+            trayWords = emptyList(),
+        )
+    }
+
     return with(state) {
         GameViewState(
             time = mapSlot(slots[0].elements[0] as Slot),
@@ -13,17 +27,7 @@ fun gamePresentation(state: GameState): GameViewState {
                 slots[2],
                 slots[3],
                 slots[4],
-            ).map { line -> FormLineModel(line.elements.map { mapSlot(it) }) }/*listOf(
-                FormLineModel(listOf())
-            ),
-            when {
-                state.perpetrator.isNotEmpty() -> listOf(
-                    "$perpetrator $murderAction $victim with $weapon",
-                    "$victim died of $deathCause",
-                    "$perpetrator took $stolenObject",
-                )
-                else -> emptyList()
-            }*/,
+            ).map { line -> FormLineModel(line.elements.map { mapSlot(it) }) },
             place = mapSlot(slots[1].elements[0] as Slot),
             motive = MotiveModel(
                 subject = mapSlot(slots[5].elements[0] as Slot),

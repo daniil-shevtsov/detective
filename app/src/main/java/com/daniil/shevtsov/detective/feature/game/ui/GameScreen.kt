@@ -97,8 +97,8 @@ fun GameScreen(
     state: GameViewState,
     onAction: OnGameAction,
 ) {
-    LongPressDraggable(modifier = Modifier.size(600.dp)) {
-        Column(modifier = Modifier.background(Color.Gray)) {
+    LongPressDraggable(modifier = Modifier.fillMaxSize()) {
+        Column(modifier = Modifier.background(Color.Gray).fillMaxSize()) {
             FillInForm(
                 state = state,
                 onDrop = { slotId, slottableId ->

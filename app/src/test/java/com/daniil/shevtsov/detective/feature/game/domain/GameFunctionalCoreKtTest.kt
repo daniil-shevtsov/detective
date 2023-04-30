@@ -2,10 +2,7 @@ package com.daniil.shevtsov.detective.feature.game.domain
 
 import assertk.all
 import assertk.assertThat
-import assertk.assertions.index
-import assertk.assertions.isEmpty
-import assertk.assertions.isEqualTo
-import assertk.assertions.prop
+import assertk.assertions.*
 import com.daniil.shevtsov.detective.feature.main.domain.AppState
 import com.daniil.shevtsov.detective.feature.main.domain.appState
 import org.junit.jupiter.api.Test
@@ -46,7 +43,7 @@ internal class GameFunctionalCoreKtTest {
             state = appState(
                 gameState = gameState(
                     slottables = listOf(slottable),
-                    slots = listOf(listOf(slot))
+                    slots = slots(listOf(slot))
                 )
             ),
             action = GameAction.SlottableDrop(slotId = slot.id, slottableId = slottable.id)
@@ -57,10 +54,14 @@ internal class GameFunctionalCoreKtTest {
             .all {
                 prop(GameState::slots)
                     .index(0)
+                    .prop(FormLine::elements)
                     .index(0)
+                    .isInstanceOf(Slot::class)
                     .prop(Slot::content)
                     .isEqualTo(slottable)
                 prop(GameState::slottables).isEmpty()
             }
     }
+
+    private fun slots(slots: List<FormElement>): List<FormLine> = listOf(FormLine(slots))
 }
