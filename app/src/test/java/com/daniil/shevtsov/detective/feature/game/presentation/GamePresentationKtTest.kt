@@ -30,16 +30,6 @@ internal class GamePresentationKtTest {
     fun `should create set state`() {
         val viewState = gamePresentation(
             state = gameState(
-                perpetrator = "John Doe",
-                victim = "John Smith",
-                time = "23-04-29",
-                place = "Apartment no. 34 of 246 Green Street",
-                deathCause = "Gunshot Wound",
-                weapon = ".44 revolver",
-                murderAction = "shot",
-                crimeAction = "took",
-                stolenObject = "golden idol",
-                motive = "took thee golden idol",
                 slots = listOf(
                     formLine(listOf(slot(content = slottable(value = "23-04-29")))),
                     formLine(listOf(slot(content = slottable(value = "Apartment no. 34 of 246 Green Street")))),
