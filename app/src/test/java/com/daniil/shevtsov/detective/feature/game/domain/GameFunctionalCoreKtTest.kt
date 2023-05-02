@@ -92,6 +92,22 @@ internal class GameFunctionalCoreKtTest {
             }
     }
 
+    @Test
+    fun `should generate initial history`() {
+        val state = gameFunctionalCore(
+            state = appState(gameState = gameState()),
+            action = GameAction.Init
+        )
+
+        assertThat(state)
+            .prop(AppState::gameState)
+            .all {
+                prop(GameState::actors)
+                    .prop(Actors::list)
+                    .isEmpty()
+            }
+    }
+
     private fun Assert<List<FormSection>>.allIdsAreUnique() = given { formSections ->
         val allSlots = formSections.flatMap {
             it.formLines.flatMap {

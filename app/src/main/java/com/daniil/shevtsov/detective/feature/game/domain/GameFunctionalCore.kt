@@ -125,6 +125,7 @@ private fun init(state: AppState): AppState {
             ),
         ),
         history = History(events = emptyList()),
+        actors = actors(),
     )
     var idCounter = 0L
     return state.copy(

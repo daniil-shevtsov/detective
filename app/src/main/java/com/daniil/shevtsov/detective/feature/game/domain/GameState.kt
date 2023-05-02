@@ -4,6 +4,7 @@ data class GameState(
     val slottables: List<Slottable>,
     val formSections: List<FormSection>,
     val history: History,
+    val actors: Actors,
 ) {
     val allSlots: List<Slot>
         get() = formSections.flatMap { it.formLines.flatMap { it.elements } }
@@ -13,9 +14,11 @@ data class GameState(
 fun gameState(
     slottables: List<Slottable> = emptyList(),
     formSections: List<FormSection> = emptyList(),
-    history: History = history()
+    history: History = history(),
+    actors: Actors = actors(),
 ) = GameState(
     slottables = slottables,
     formSections = formSections,
     history = history,
+    actors = actors,
 )
