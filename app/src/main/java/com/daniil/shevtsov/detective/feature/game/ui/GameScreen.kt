@@ -15,11 +15,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.daniil.shevtsov.detective.feature.game.domain.GameAction
+import com.daniil.shevtsov.detective.feature.game.domain.SlottableId
 import com.daniil.shevtsov.detective.feature.game.presentation.*
 import timber.log.Timber
 
 typealias OnGameAction = (action: GameAction) -> Unit
-typealias OnDrop = (slotId: Long, slottableId: Long) -> Unit
+typealias OnDrop = (slotId: Long, slottableId: SlottableId) -> Unit
 
 @Preview
 @Composable
@@ -116,7 +117,7 @@ fun WordTray(
 @Composable
 fun TrayWord(model: SlottableModel) {
     Timber.d("TrayWord with id ${model.id}")
-    DragTarget(modifier = Modifier, dataToDrop = model.id) {
+    DragTarget(modifier = Modifier, dataToDrop = model.id.raw) {
         Timber.d("Displaying $model with ${model.id} on drag")
         Text(
             modifier = Modifier.background(Color.Gray).padding(8.dp),
@@ -240,7 +241,7 @@ fun Slot(model: SlotModel, onDrop: OnDrop) {
             Timber.d("before launched effect for ${model.id}")
             LaunchedEffect(slottableId, isInBound) {
                 Timber.d("inside launched effect for ${model.id}")
-                onDrop(model.id, slottableId)
+                onDrop(model.id, SlottableId(slottableId))
             }
         }
         when (model) {
@@ -277,7 +278,7 @@ fun Slot(model: SlotModel, onDrop: OnDrop) {
 }
 
 private fun slottableModel(text: String) = SlottableModel(
-    id = 0L,
+    id = SlottableId(0L),
     text = text,
 )
 
@@ -303,7 +304,7 @@ private fun formSectionModel(title: String, lines: List<FormLineModel> = emptyLi
 private fun slotModel(text: String) = SlotModel.Set(
     id = 0L,
     value = SlottableModel(
-        id = 0L,
+        id = SlottableId(0L),
         text = text,
     )
 )

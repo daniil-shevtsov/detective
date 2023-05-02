@@ -78,47 +78,47 @@ private fun init(state: AppState): AppState {
             ),
         ),
         slottables = listOf(
-            Slottable(
+            slottable(
                 id = 0L,
                 value = "John Doe",
                 type = SlottableType.Person,
             ),
-            Slottable(
+            slottable(
                 id = 1L,
                 value = "John Smith",
                 type = SlottableType.Person,
             ),
-            Slottable(
+            slottable(
                 id = 2L,
                 value = "23-04-29",
                 type = SlottableType.Time,
             ),
-            Slottable(
+            slottable(
                 id = 3L,
                 value = "Apartment no. 34 of 246 Green Street",
                 type = SlottableType.Place,
             ),
-            Slottable(
+            slottable(
                 id = 4L,
                 value = "Gunshot Wound",
                 type = SlottableType.Noun,
             ),
-            Slottable(
+            slottable(
                 id = 5L,
                 value = ".44 revolver",
                 type = SlottableType.Noun,
             ),
-            Slottable(
+            slottable(
                 id = 6L,
                 value = "shot",
                 type = SlottableType.Verb,
             ),
-            Slottable(
+            slottable(
                 id = 7L,
                 value = "took",
                 type = SlottableType.Verb,
             ),
-            Slottable(
+            slottable(
                 id = 8L,
                 value = "golden idol",
                 type = SlottableType.Noun,
