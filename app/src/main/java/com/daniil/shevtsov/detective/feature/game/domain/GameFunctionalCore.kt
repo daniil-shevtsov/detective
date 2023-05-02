@@ -124,6 +124,7 @@ private fun init(state: AppState): AppState {
                 type = SlottableType.Noun,
             ),
         ),
+        history = History(events = emptyList()),
     )
     var idCounter = 0L
     return state.copy(

@@ -37,6 +37,9 @@ internal class GameFunctionalCoreKtTest {
                                 .isNull()
                         }
                     }
+                prop(GameState::history)
+                    .prop(History::events)
+                    .isEmpty()
             }
     }
 
