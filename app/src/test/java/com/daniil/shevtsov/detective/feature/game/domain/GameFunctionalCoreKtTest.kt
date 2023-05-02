@@ -112,7 +112,7 @@ internal class GameFunctionalCoreKtTest {
     }
 
     private fun Assert<GameState>.slotHasSlottable(
-        expectedSlotId: Long,
+        expectedSlotId: SlotId,
         expectedSlottableId: SlottableId
     ) = given { gameState ->
         val slot = gameState.allSlots.find { slot -> slot.id == expectedSlotId }

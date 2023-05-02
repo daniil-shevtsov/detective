@@ -134,7 +134,7 @@ private fun init(state: AppState): AppState {
                     formLine.copy(elements = formLine.elements.map { formElement ->
                         when (formElement) {
                             is Slot -> formElement.copy(
-                                id = idCounter++
+                                id = SlotId(idCounter++)
                             )
                             else -> formElement
                         }
@@ -157,4 +157,4 @@ fun sectionWithEmptySlot(title: String, type: SlottableType) = sectionWithLines(
     FormLine(listOf(emptySlotOf(type)))
 )
 
-fun emptySlotOf(type: SlottableType) = Slot(id = -1L, content = null, type = type)
+fun emptySlotOf(type: SlottableType) = Slot(id = SlotId(-1L), content = null, type = type)

@@ -15,12 +15,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.daniil.shevtsov.detective.feature.game.domain.GameAction
+import com.daniil.shevtsov.detective.feature.game.domain.SlotId
 import com.daniil.shevtsov.detective.feature.game.domain.SlottableId
 import com.daniil.shevtsov.detective.feature.game.presentation.*
 import timber.log.Timber
 
 typealias OnGameAction = (action: GameAction) -> Unit
-typealias OnDrop = (slotId: Long, slottableId: SlottableId) -> Unit
+typealias OnDrop = (slotId: SlotId, slottableId: SlottableId) -> Unit
 
 @Preview
 @Composable
@@ -282,8 +283,6 @@ private fun slottableModel(text: String) = SlottableModel(
     text = text,
 )
 
-private fun emptySlotModel() = SlotModel.Empty(id = 0L)
-
 private fun oneElementLine(element: SlotModel) = formLineModel(elements = listOf(element))
 
 private fun oneElementSection(title: String, value: String) = oneLineSection(
@@ -302,11 +301,11 @@ private fun formSectionModel(title: String, lines: List<FormLineModel> = emptyLi
     FormSectionModel(title = title, lines = lines)
 
 private fun slotModel(text: String) = SlotModel.Set(
-    id = 0L,
+    id = SlotId(0L),
     value = SlottableModel(
         id = SlottableId(0L),
         text = text,
     )
 )
 
-private fun slotText(text: String) = SlotModel.Text(0L, text)
+private fun slotText(text: String) = SlotModel.Text(SlotId(0L), text)

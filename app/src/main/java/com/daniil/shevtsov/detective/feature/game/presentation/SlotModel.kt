@@ -1,13 +1,15 @@
 package com.daniil.shevtsov.detective.feature.game.presentation
 
-sealed interface SlotModel {
-    val id: Long
+import com.daniil.shevtsov.detective.feature.game.domain.SlotId
 
-    data class Empty(override val id: Long) : SlotModel
+sealed interface SlotModel {
+    val id: SlotId
+
+    data class Empty(override val id: SlotId) : SlotModel
     data class Set(
-        override val id: Long,
+        override val id: SlotId,
         val value: SlottableModel
     ) : SlotModel
 
-    data class Text(override val id: Long, val text: String) : SlotModel
+    data class Text(override val id: SlotId, val text: String) : SlotModel
 }
