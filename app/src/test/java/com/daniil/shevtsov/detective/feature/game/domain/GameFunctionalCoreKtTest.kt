@@ -20,8 +20,11 @@ internal class GameFunctionalCoreKtTest {
         assertThat(state)
             .prop(AppState::gameState)
             .all {
-                prop(GameState::slottables).any {
-                    it.prop(Slottable::value).isEqualTo("John Doe")
+                prop(GameState::slottables).all {
+                    allSlottableIdsAreUnique()
+                    any {
+                        it.prop(Slottable::value).isEqualTo("John Doe")
+                    }
                 }
                 prop(GameState::formSections)
                     .all {
@@ -119,6 +122,21 @@ internal class GameFunctionalCoreKtTest {
                 it.elements.filterIsInstance<Slot>()
             }
         }
+        val ids = allSlots.map { it.id }
+
+        val duplicateIds = ids.filter { id -> ids.count { it == id } > 1 }.toSet()
+
+        if (duplicateIds.isEmpty()) {
+            return@given
+        }
+
+        val duplicates = allSlots.filter { it.id in duplicateIds }
+
+        expected(message = "expected all ids to be unique but there are duplicates:$duplicates")
+    }
+
+    private fun Assert<List<Slottable>>.allSlottableIdsAreUnique() = given { slottables ->
+        val allSlots = slottables
         val ids = allSlots.map { it.id }
 
         val duplicateIds = ids.filter { id -> ids.count { it == id } > 1 }.toSet()

@@ -53,9 +53,9 @@ private fun init(state: AppState): AppState {
 
 }
 
-private fun makeSlotIdUnique(gameState: GameState): GameState {
+private fun GameState.makeSlotIdUnique(): GameState {
     var idCounter = 0L
-    return gameState.copy(formSections = gameState.formSections.mapIndexed { index, formSection ->
+    return copy(formSections = formSections.mapIndexed { index, formSection ->
         formSection.copy(
             formLines = formSection.formLines.map { formLine ->
                 formLine.copy(elements = formLine.elements.map { formElement ->
@@ -72,13 +72,26 @@ private fun makeSlotIdUnique(gameState: GameState): GameState {
 }
 
 private fun makeIdsUnique(gameState: GameState): GameState {
-    return makeSlotIdUnique(gameState)
+    return gameState
+        .makeSlotIdUnique()
 //    return gameState.makeIdsUnique(
 //        extractId = { property -> },
 //        extractProperty = { main -> },
 //        updateId = { updateId -> },
 //        updateProperty =,
 //    )
+}
+
+private fun <PropertyType, IdType> List<PropertyType>.makeUniqueIds(
+    extractId: (property: PropertyType) -> IdType,
+    updateId: (property: PropertyType, newId: IdType) -> PropertyType,
+    incrementId: (old: IdType) -> IdType,
+): List<PropertyType> {
+    var counter = extractId(first())
+    return map { property ->
+        counter = incrementId(counter)
+        updateId(property, counter)
+    }
 }
 
 private fun <MainType, PropertyType, IdType> MainType.makeIdsUnique(
@@ -98,8 +111,9 @@ private fun <MainType, PropertyType, IdType> MainType.makeIdsUnique(
     return updateProperty(this, newProperties)
 }
 
-private fun createInitialState() = GameState(
-    formSections = listOf(
+private fun createInitialState(): GameState {
+
+    val formSections = listOf(
         sectionWithEmptySlot(title = "When", type = SlottableType.Time),
         sectionWithEmptySlot(title = "Where", type = SlottableType.Place),
         sectionWithLines(
@@ -130,8 +144,8 @@ private fun createInitialState() = GameState(
                 emptySlotOf(type = SlottableType.Noun),
             )
         ),
-    ),
-    slottables = listOf(
+    )
+    val slottables = listOf(
         slottable(
             value = "John Doe",
             type = SlottableType.Person,
@@ -168,13 +182,21 @@ private fun createInitialState() = GameState(
             value = "golden idol",
             type = SlottableType.Noun,
         ),
-    ),
-    history = History(events = emptyList()),
-    actors = actors(
-        actor(name = "John Doe"),
-        actor(name = "John Smith"),
-    ),
-)
+    ).makeUniqueIds(
+        extractId = Slottable::id,
+        updateId = { slottable, newId -> slottable.copy(id = newId) },
+        incrementId = { id -> SlottableId(id.raw + 1) }
+    )
+    return GameState(
+        formSections = formSections,
+        slottables = slottables,
+        history = History(events = emptyList()),
+        actors = actors(
+            actor(name = "John Doe"),
+            actor(name = "John Smith"),
+        ),
+    )
+}
 
 fun formLine(vararg elements: FormElement) = FormLine(elements = elements.toList())
 
