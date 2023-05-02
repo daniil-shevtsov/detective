@@ -104,7 +104,12 @@ internal class GameFunctionalCoreKtTest {
             .all {
                 prop(GameState::actors)
                     .prop(Actors::list)
-                    .isEmpty()
+                    .extracting(Actor::name)
+                    .extracting(Actor.Name::raw)
+                    .containsExactly(
+                        "John Doe",
+                        "John Smith",
+                    )
             }
     }
 

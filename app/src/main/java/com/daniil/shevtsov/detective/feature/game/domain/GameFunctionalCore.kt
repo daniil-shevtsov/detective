@@ -44,107 +44,137 @@ fun onSlottableDrop(state: AppState, action: GameAction.SlottableDrop): AppState
 }
 
 private fun init(state: AppState): AppState {
-    val initGameState = GameState(
-        formSections = listOf(
-            sectionWithEmptySlot(title = "When", type = SlottableType.Time),
-            sectionWithEmptySlot(title = "Where", type = SlottableType.Place),
-            sectionWithLines(
-                title = "Who and What",
-                formLine(
-                    emptySlotOf(type = SlottableType.Person),
-                    emptySlotOf(type = SlottableType.Verb),
-                    emptySlotOf(SlottableType.Person),
-                    FormText("with"),
-                    emptySlotOf(type = SlottableType.Noun),
-                ),
-                formLine(
-                    emptySlotOf(type = SlottableType.Person),
-                    FormText("died of"),
-                    emptySlotOf(type = SlottableType.Noun),
-                ),
-                formLine(
-                    emptySlotOf(type = SlottableType.Person),
-                    emptySlotOf(type = SlottableType.Verb),
-                    emptySlotOf(type = SlottableType.Noun),
-                ),
-            ),
-            sectionWithLines(
-                title = "Why",
-                formLine(
-                    emptySlotOf(type = SlottableType.Person),
-                    emptySlotOf(type = SlottableType.Verb),
-                    emptySlotOf(type = SlottableType.Noun),
-                )
-            ),
-        ),
-        slottables = listOf(
-            slottable(
-                id = 0L,
-                value = "John Doe",
-                type = SlottableType.Person,
-            ),
-            slottable(
-                id = 1L,
-                value = "John Smith",
-                type = SlottableType.Person,
-            ),
-            slottable(
-                id = 2L,
-                value = "23-04-29",
-                type = SlottableType.Time,
-            ),
-            slottable(
-                id = 3L,
-                value = "Apartment no. 34 of 246 Green Street",
-                type = SlottableType.Place,
-            ),
-            slottable(
-                id = 4L,
-                value = "Gunshot Wound",
-                type = SlottableType.Noun,
-            ),
-            slottable(
-                id = 5L,
-                value = ".44 revolver",
-                type = SlottableType.Noun,
-            ),
-            slottable(
-                id = 6L,
-                value = "shot",
-                type = SlottableType.Verb,
-            ),
-            slottable(
-                id = 7L,
-                value = "took",
-                type = SlottableType.Verb,
-            ),
-            slottable(
-                id = 8L,
-                value = "golden idol",
-                type = SlottableType.Noun,
-            ),
-        ),
-        history = History(events = emptyList()),
-        actors = actors(),
-    )
-    var idCounter = 0L
+    val initGameState = createInitialState()
+
     return state.copy(
-        gameState = initGameState.copy(formSections = initGameState.formSections.mapIndexed { index, formSection ->
-            formSection.copy(
-                formLines = formSection.formLines.map { formLine ->
-                    formLine.copy(elements = formLine.elements.map { formElement ->
-                        when (formElement) {
-                            is Slot -> formElement.copy(
-                                id = SlotId(idCounter++)
-                            )
-                            else -> formElement
-                        }
-                    })
-                }
-            )
-        })
+        gameState = makeIdsUnique(initGameState)
     )
+
+
 }
+
+private fun makeSlotIdUnique(gameState: GameState): GameState {
+    var idCounter = 0L
+    return gameState.copy(formSections = gameState.formSections.mapIndexed { index, formSection ->
+        formSection.copy(
+            formLines = formSection.formLines.map { formLine ->
+                formLine.copy(elements = formLine.elements.map { formElement ->
+                    when (formElement) {
+                        is Slot -> formElement.copy(
+                            id = SlotId(idCounter++)
+                        )
+                        else -> formElement
+                    }
+                })
+            }
+        )
+    })
+}
+
+private fun makeIdsUnique(gameState: GameState): GameState {
+    return makeSlotIdUnique(gameState)
+//    return gameState.makeIdsUnique(
+//        extractId = { property -> },
+//        extractProperty = { main -> },
+//        updateId = { updateId -> },
+//        updateProperty =,
+//    )
+}
+
+private fun <MainType, PropertyType, IdType> MainType.makeIdsUnique(
+    extractId: (property: PropertyType) -> IdType,
+    extractProperty: (main: MainType) -> List<PropertyType>,
+    updateId: (property: PropertyType, newId: IdType) -> PropertyType,
+    updateProperty: (main: MainType, new: List<PropertyType>) -> MainType,
+    incrementId: (old: IdType) -> IdType,
+): MainType {
+    val oldProperties = extractProperty(this)
+    var initialCounter = extractId(oldProperties.first())
+    val newProperties = oldProperties.map { oldProperty ->
+        val newProperty = updateId(oldProperty, initialCounter)
+        initialCounter = incrementId(initialCounter)
+        newProperty
+    }
+    return updateProperty(this, newProperties)
+}
+
+private fun createInitialState() = GameState(
+    formSections = listOf(
+        sectionWithEmptySlot(title = "When", type = SlottableType.Time),
+        sectionWithEmptySlot(title = "Where", type = SlottableType.Place),
+        sectionWithLines(
+            title = "Who and What",
+            formLine(
+                emptySlotOf(type = SlottableType.Person),
+                emptySlotOf(type = SlottableType.Verb),
+                emptySlotOf(SlottableType.Person),
+                FormText("with"),
+                emptySlotOf(type = SlottableType.Noun),
+            ),
+            formLine(
+                emptySlotOf(type = SlottableType.Person),
+                FormText("died of"),
+                emptySlotOf(type = SlottableType.Noun),
+            ),
+            formLine(
+                emptySlotOf(type = SlottableType.Person),
+                emptySlotOf(type = SlottableType.Verb),
+                emptySlotOf(type = SlottableType.Noun),
+            ),
+        ),
+        sectionWithLines(
+            title = "Why",
+            formLine(
+                emptySlotOf(type = SlottableType.Person),
+                emptySlotOf(type = SlottableType.Verb),
+                emptySlotOf(type = SlottableType.Noun),
+            )
+        ),
+    ),
+    slottables = listOf(
+        slottable(
+            value = "John Doe",
+            type = SlottableType.Person,
+        ),
+        slottable(
+            value = "John Smith",
+            type = SlottableType.Person,
+        ),
+        slottable(
+            value = "23-04-29",
+            type = SlottableType.Time,
+        ),
+        slottable(
+            value = "Apartment no. 34 of 246 Green Street",
+            type = SlottableType.Place,
+        ),
+        slottable(
+            value = "Gunshot Wound",
+            type = SlottableType.Noun,
+        ),
+        slottable(
+            value = ".44 revolver",
+            type = SlottableType.Noun,
+        ),
+        slottable(
+            value = "shot",
+            type = SlottableType.Verb,
+        ),
+        slottable(
+            value = "took",
+            type = SlottableType.Verb,
+        ),
+        slottable(
+            value = "golden idol",
+            type = SlottableType.Noun,
+        ),
+    ),
+    history = History(events = emptyList()),
+    actors = actors(
+        actor(name = "John Doe"),
+        actor(name = "John Smith"),
+    ),
+)
 
 fun formLine(vararg elements: FormElement) = FormLine(elements = elements.toList())
 

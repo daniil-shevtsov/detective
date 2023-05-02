@@ -5,3 +5,4 @@ data class Actors(
 )
 
 fun actors(list: List<Actor> = emptyList()) = Actors(list = list)
+fun actors(vararg actors: Actor) = Actors(list = actors.toList())
