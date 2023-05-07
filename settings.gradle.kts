@@ -9,6 +9,3 @@ pluginManagement {
 rootProject.name = "detective"
 
 include(":app")
-include(":app-desktop")
-include(":app-web")
-include(":common")

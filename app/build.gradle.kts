@@ -25,12 +25,8 @@ android {
         }
     }
 
-    lint {
-        isAbortOnError = false
-    }
-
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
         freeCompilerArgs = listOf(
             "-Xopt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
             "-Xopt-in=kotlinx.coroutines.time",
@@ -41,8 +37,8 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 
     buildFeatures {
@@ -50,13 +46,10 @@ android {
         viewBinding = true
     }
 
-    lint {
-        isAbortOnError = false
-    }
-
     composeOptions {
-        kotlinCompilerExtensionVersion = Versions.compose
+        kotlinCompilerExtensionVersion = Versions.composeCompiler
     }
+    namespace = "com.daniil.shevtsov.detective"
 
     tasks.withType<Test> {
         useJUnitPlatform()
@@ -65,8 +58,6 @@ android {
 }
 
 dependencies {
-    implementation(project(":common"))
-
     with(Deps.Android) {
         implementation(material)
     }
@@ -91,23 +82,19 @@ dependencies {
     }
 
     with(Deps.Compose) {
-        implementation(ui)
+//        implementation(ui)
         implementation(uiGraphics)
         implementation(uiTooling)
         implementation(foundationLayout)
         implementation(materialExtended)
         implementation(material)
-        implementation(navigation)
+//        implementation(navigation)
     }
 
     with(Deps.Koin) {
         implementation(core)
         implementation(android)
         implementation(compose)
-    }
-
-    with(Deps.KorLibs) {
-        implementation(kBigNumAndroid)
     }
 
     with(Deps.ViewBinding) {
@@ -120,7 +107,6 @@ dependencies {
         testImplementation(jupiter)
         testImplementation(mockk)
         testImplementation(mockkAgent)
-//        testImplementation(mockkCommon)
         testImplementation(turbine)
     }
 }
