@@ -45,30 +45,66 @@ import timber.log.Timber
 typealias OnGameAction = (action: GameAction) -> Unit
 typealias OnDrop = (slotId: SlotId, slottableId: SlottableId) -> Unit
 
+data class TextModel(
+    val tag: String,
+    val value: String,
+    val color: Color,
+)
+
 @Preview
 @Composable
 fun GameScreenPreview() {
-    var clickedText by remember { mutableStateOf("Not clicked") }
+    val textModels = listOf(
+        TextModel(
+            tag = "Name",
+            value = "John Doe:",
+            color = Color.White
+        ),
+        TextModel(
+            tag = "Text",
+            value = " I was with",
+            color = Color.Black
+        ),
+        TextModel(
+            tag = "Name2",
+            value = " John Smith",
+            color = Color.White
+        ),
+    )
+
+    var clickedTags by remember { mutableStateOf(setOf<String>()) }
     val tnc = "Terms and Condition"
     val privacyPolicy = "Privacy policy"
     val annotatedString = buildAnnotatedString {
-        append("I have read ")
-        withStyle(style = SpanStyle(color = Color.Red)) {
-            pushStringAnnotation(tag = tnc, annotation = tnc)
-            append(tnc)
+        textModels.forEach { textModel ->
+            with(textModel) {
+                val color = when {
+                    clickedTags.contains(tag) -> Color.DarkGray
+                    else -> color
+                }
+                withStyle(style = SpanStyle(color = color)) {
+                    pushStringAnnotation(tag = tag, annotation = value)
+                    append(value)
+                }
+            }
         }
-        append(" and ")
-        withStyle(style = SpanStyle(color = Color.Red)) {
-            pushStringAnnotation(tag = privacyPolicy, annotation = privacyPolicy)
-            append(privacyPolicy)
-        }
-        append(clickedText)
+//        append("I have read ")
+//        withStyle(style = SpanStyle(color = Color.Red)) {
+//            pushStringAnnotation(tag = tnc, annotation = tnc)
+//            append(tnc)
+//        }
+//        append(" and ")
+//        withStyle(style = SpanStyle(color = Color.Red)) {
+//            pushStringAnnotation(tag = privacyPolicy, annotation = privacyPolicy)
+//            append(privacyPolicy)
+//        }
+//        append(clickedText)
     }
     ClickableText(text = annotatedString, onClick = { offset ->
         annotatedString.getStringAnnotations(offset, offset)
             .firstOrNull()?.let { span ->
                 println("Clicked on ${span.item}")
-                clickedText = "Clicked"
+                clickedTags = clickedTags + span.tag
             }
     })
 //    GameScreen(
