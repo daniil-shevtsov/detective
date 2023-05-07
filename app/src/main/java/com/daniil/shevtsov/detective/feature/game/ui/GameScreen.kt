@@ -1,23 +1,45 @@
 package com.daniil.shevtsov.detective.feature.game.ui
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.Arrangement.Absolute.spacedBy
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.defaultMinSize
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.daniil.shevtsov.detective.feature.game.domain.GameAction
 import com.daniil.shevtsov.detective.feature.game.domain.SlotId
 import com.daniil.shevtsov.detective.feature.game.domain.SlottableId
-import com.daniil.shevtsov.detective.feature.game.presentation.*
+import com.daniil.shevtsov.detective.feature.game.presentation.DragTarget
+import com.daniil.shevtsov.detective.feature.game.presentation.DropTarget
+import com.daniil.shevtsov.detective.feature.game.presentation.FormLineModel
+import com.daniil.shevtsov.detective.feature.game.presentation.FormSectionModel
+import com.daniil.shevtsov.detective.feature.game.presentation.GameViewState
+import com.daniil.shevtsov.detective.feature.game.presentation.LongPressDraggable
+import com.daniil.shevtsov.detective.feature.game.presentation.MotiveModel
+import com.daniil.shevtsov.detective.feature.game.presentation.SlotModel
+import com.daniil.shevtsov.detective.feature.game.presentation.SlottableModel
 import timber.log.Timber
 
 typealias OnGameAction = (action: GameAction) -> Unit
@@ -26,57 +48,80 @@ typealias OnDrop = (slotId: SlotId, slottableId: SlottableId) -> Unit
 @Preview
 @Composable
 fun GameScreenPreview() {
-    GameScreen(
-        state = GameViewState(
-            trayWords = listOf(
-                slottableModel("Jane Doe"),
-                slottableModel("stole"),
-                slottableModel("cheburek")
-            ),
-            sections = listOf(
-                oneElementSection(title = "When", value = "23-04-29"),
-                oneElementSection(title = "Where", value = "Apartment no. 34 of 246 Green Street"),
-                formSectionModel(
-                    title = "Who and What", lines = listOf(
-                        formLineModel(
-                            listOf(
-                                slotModel("John Doe"),
-                                slotModel("shot"),
-                                slotModel("John Smith"),
-                                slotText("with"),
-                                slotModel(".44 revolver"),
-                            )
-                        ),
-                        formLineModel(
-                            listOf(
-                                slotModel("John Doe"),
-                                slotModel("died"),
-                                slotText("of"),
-                                slotModel("gunshot wound"),
-                            )
-                        ),
-                        formLineModel(
-                            listOf(
-                                slotModel("John Doe"),
-                                slotModel("took"),
-                                slotModel("golden idol")
-                            )
-                        ),
-                    )
-                ),
-                oneLineSection(
-                    title = "Why", line = formLineModel(
-                        listOf(
-                            slotModel("John Smith"),
-                            slotModel("took"),
-                            slotModel("golden idol")
-                        )
-                    )
-                ),
-            )
-        ),
-        onAction = {}
-    )
+    var clickedText by remember { mutableStateOf("Not clicked") }
+    val tnc = "Terms and Condition"
+    val privacyPolicy = "Privacy policy"
+    val annotatedString = buildAnnotatedString {
+        append("I have read ")
+        withStyle(style = SpanStyle(color = Color.Red)) {
+            pushStringAnnotation(tag = tnc, annotation = tnc)
+            append(tnc)
+        }
+        append(" and ")
+        withStyle(style = SpanStyle(color = Color.Red)) {
+            pushStringAnnotation(tag = privacyPolicy, annotation = privacyPolicy)
+            append(privacyPolicy)
+        }
+        append(clickedText)
+    }
+    ClickableText(text = annotatedString, onClick = { offset ->
+        annotatedString.getStringAnnotations(offset, offset)
+            .firstOrNull()?.let { span ->
+                println("Clicked on ${span.item}")
+                clickedText = "Clicked"
+            }
+    })
+//    GameScreen(
+//        state = GameViewState(
+//            trayWords = listOf(
+//                slottableModel("Jane Doe"),
+//                slottableModel("stole"),
+//                slottableModel("cheburek")
+//            ),
+//            sections = listOf(
+//                oneElementSection(title = "When", value = "23-04-29"),
+//                oneElementSection(title = "Where", value = "Apartment no. 34 of 246 Green Street"),
+//                formSectionModel(
+//                    title = "Who and What", lines = listOf(
+//                        formLineModel(
+//                            listOf(
+//                                slotModel("John Doe"),
+//                                slotModel("shot"),
+//                                slotModel("John Smith"),
+//                                slotText("with"),
+//                                slotModel(".44 revolver"),
+//                            )
+//                        ),
+//                        formLineModel(
+//                            listOf(
+//                                slotModel("John Doe"),
+//                                slotModel("died"),
+//                                slotText("of"),
+//                                slotModel("gunshot wound"),
+//                            )
+//                        ),
+//                        formLineModel(
+//                            listOf(
+//                                slotModel("John Doe"),
+//                                slotModel("took"),
+//                                slotModel("golden idol")
+//                            )
+//                        ),
+//                    )
+//                ),
+//                oneLineSection(
+//                    title = "Why", line = formLineModel(
+//                        listOf(
+//                            slotModel("John Smith"),
+//                            slotModel("took"),
+//                            slotModel("golden idol")
+//                        )
+//                    )
+//                ),
+//            )
+//        ),
+//        onAction = {}
+//    )
 }
 
 @Composable
@@ -258,6 +303,7 @@ fun Slot(model: SlotModel, onDrop: OnDrop) {
             ) {
                 Text("")
             }
+
             is SlotModel.Set -> Box(
                 modifier = Modifier
                     .defaultMinSize(minWidth = 60.dp)
@@ -271,6 +317,7 @@ fun Slot(model: SlotModel, onDrop: OnDrop) {
             ) {
                 Text(textAlign = TextAlign.Center, text = model.value.text)
             }
+
             is SlotModel.Text -> {
                 Text(text = model.text)
             }
