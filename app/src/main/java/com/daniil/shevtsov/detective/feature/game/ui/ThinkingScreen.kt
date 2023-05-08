@@ -28,18 +28,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.daniil.shevtsov.detective.feature.conversation.ui.ConversationScreen
 import com.daniil.shevtsov.detective.feature.game.domain.GameAction
 import com.daniil.shevtsov.detective.feature.game.domain.SlotId
 import com.daniil.shevtsov.detective.feature.game.domain.SlottableId
-import com.daniil.shevtsov.detective.feature.game.presentation.ContentViewState
-import com.daniil.shevtsov.detective.feature.game.presentation.ConversationViewState
 import com.daniil.shevtsov.detective.feature.game.presentation.DragTarget
 import com.daniil.shevtsov.detective.feature.game.presentation.DropTarget
 import com.daniil.shevtsov.detective.feature.game.presentation.FormLineModel
 import com.daniil.shevtsov.detective.feature.game.presentation.FormSectionModel
 import com.daniil.shevtsov.detective.feature.game.presentation.GameViewState
-import com.daniil.shevtsov.detective.feature.game.presentation.LongPressDraggable
 import com.daniil.shevtsov.detective.feature.game.presentation.MotiveModel
 import com.daniil.shevtsov.detective.feature.game.presentation.SlotModel
 import com.daniil.shevtsov.detective.feature.game.presentation.SlottableModel
@@ -172,24 +168,11 @@ fun gameViewStateCompose() = GameViewState(
 
 @Preview
 @Composable
-fun GameScreenPreview() {
-    GameScreen(
+fun ThinkingScreenPreview() {
+    ThinkingScreen(
         state = gameViewStateCompose(),
         onAction = {}
     )
-}
-
-@Composable
-fun GameScreen(
-    state: ContentViewState,
-    onAction: OnGameAction,
-) {
-    LongPressDraggable(modifier = Modifier.fillMaxSize()) {
-        when(state) {
-            is ConversationViewState -> ConversationScreen(state, onAction)
-            is GameViewState -> ThinkingScreen(state, onAction)
-        }
-    }
 }
 
 @Composable

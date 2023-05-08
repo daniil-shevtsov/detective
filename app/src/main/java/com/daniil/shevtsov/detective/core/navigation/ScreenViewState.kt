@@ -5,5 +5,7 @@ import com.daniil.shevtsov.detective.feature.game.presentation.ContentViewState
 
 sealed class ScreenViewState {
     object Loading : ScreenViewState()
-    data class Main(val state: ContentViewState) : ScreenViewState()
+    data class Main(
+        val content: ContentViewState,
+    ) : ScreenViewState()
 }
