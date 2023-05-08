@@ -9,6 +9,6 @@ fun screenPresentationFunctionalCore(
 ): ScreenViewState {
     return when (state.currentScreen) {
         Screen.Main -> ScreenViewState.Main(gamePresentation(state.gameState))
-        Screen.FinishedGame -> ScreenViewState.Main(gamePresentation(state.gameState))
+        Screen.Conversation -> ScreenViewState.Main(gamePresentation(state.gameState))
     }
 }

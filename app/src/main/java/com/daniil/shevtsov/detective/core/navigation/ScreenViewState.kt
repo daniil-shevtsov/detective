@@ -1,9 +1,9 @@
 package com.daniil.shevtsov.detective.core.navigation
 
-import com.daniil.shevtsov.detective.feature.game.presentation.GameViewState
+import com.daniil.shevtsov.detective.feature.game.presentation.ContentViewState
 
 
 sealed class ScreenViewState {
     object Loading : ScreenViewState()
-    data class Main(val state: GameViewState) : ScreenViewState()
+    data class Main(val state: ContentViewState) : ScreenViewState()
 }

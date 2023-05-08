@@ -14,44 +14,44 @@ internal class GeneralFunctionalCoreTest {
     fun `should replace current screen when opening another`() {
         val state = generalFunctionalCore(
             state = appState(currentScreen = Screen.Main),
-            viewAction = GeneralViewAction.Open(screen = Screen.FinishedGame)
+            viewAction = GeneralViewAction.Open(screen = Screen.Conversation)
         )
 
         assertThat(state)
             .prop(AppState::currentScreen)
-            .isEqualTo(Screen.FinishedGame)
+            .isEqualTo(Screen.Conversation)
     }
 
     @Test
     fun `should add screen to stack when opening it`() {
         val state = generalFunctionalCore(
             state = appState(currentScreen = Screen.Main, screenStack = listOf(Screen.Main)),
-            viewAction = GeneralViewAction.Open(screen = Screen.FinishedGame)
+            viewAction = GeneralViewAction.Open(screen = Screen.Conversation)
         )
 
         assertThat(state)
             .prop(AppState::screenStack)
-            .containsExactly(Screen.Main, Screen.FinishedGame)
+            .containsExactly(Screen.Main, Screen.Conversation)
     }
 
     @Test
     fun `should replace screen in stack if replace flag`() {
         val state = generalFunctionalCore(
             state = appState(currentScreen = Screen.Main, screenStack = listOf(Screen.Main)),
-            viewAction = GeneralViewAction.Open(screen = Screen.FinishedGame, shouldReplace = true)
+            viewAction = GeneralViewAction.Open(screen = Screen.Conversation, shouldReplace = true)
         )
 
         assertThat(state)
             .prop(AppState::screenStack)
-            .containsExactly(Screen.FinishedGame)
+            .containsExactly(Screen.Conversation)
     }
 
     @Test
     fun `should go back when back clicked`() {
         val state = generalFunctionalCore(
             state = appState(
-                currentScreen = Screen.FinishedGame,
-                screenStack = listOf(Screen.Main, Screen.FinishedGame)
+                currentScreen = Screen.Conversation,
+                screenStack = listOf(Screen.Main, Screen.Conversation)
             ),
             viewAction = GeneralViewAction.Back
         )
@@ -65,8 +65,8 @@ internal class GeneralFunctionalCoreTest {
     fun `should remove last element from screen stack when back clicked`() {
         val state = generalFunctionalCore(
             state = appState(
-                currentScreen = Screen.FinishedGame,
-                screenStack = listOf(Screen.Main, Screen.FinishedGame)
+                currentScreen = Screen.Conversation,
+                screenStack = listOf(Screen.Main, Screen.Conversation)
             ),
             viewAction = GeneralViewAction.Back
         )

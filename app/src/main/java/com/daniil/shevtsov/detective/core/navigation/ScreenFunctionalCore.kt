@@ -13,6 +13,7 @@ fun screenFunctionalCore(
             state = state,
             viewAction = viewAction.action,
         )
+
         is ScreenViewAction.Game -> gameFunctionalCore(
             state = state,
             action = viewAction.action

@@ -28,15 +28,17 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.daniil.shevtsov.detective.feature.conversation.ui.ConversationScreen
 import com.daniil.shevtsov.detective.feature.game.domain.GameAction
 import com.daniil.shevtsov.detective.feature.game.domain.SlotId
 import com.daniil.shevtsov.detective.feature.game.domain.SlottableId
+import com.daniil.shevtsov.detective.feature.game.presentation.ContentViewState
+import com.daniil.shevtsov.detective.feature.game.presentation.ConversationViewState
 import com.daniil.shevtsov.detective.feature.game.presentation.DragTarget
 import com.daniil.shevtsov.detective.feature.game.presentation.DropTarget
 import com.daniil.shevtsov.detective.feature.game.presentation.FormLineModel
 import com.daniil.shevtsov.detective.feature.game.presentation.FormSectionModel
 import com.daniil.shevtsov.detective.feature.game.presentation.GameViewState
-import com.daniil.shevtsov.detective.feature.game.presentation.GameViewStateNew
 import com.daniil.shevtsov.detective.feature.game.presentation.LongPressDraggable
 import com.daniil.shevtsov.detective.feature.game.presentation.MotiveModel
 import com.daniil.shevtsov.detective.feature.game.presentation.SlotModel
@@ -119,69 +121,72 @@ fun DialogPreview() {
     })
 }
 
-@Preview
-@Composable
-fun GameScreenPreview() {
-    GameScreen(
-        state = GameViewState(
-            trayWords = listOf(
-                slottableModel("Jane Doe"),
-                slottableModel("stole"),
-                slottableModel("cheburek")
-            ),
-            sections = listOf(
-                oneElementSection(title = "When", value = "23-04-29"),
-                oneElementSection(title = "Where", value = "Apartment no. 34 of 246 Green Street"),
-                formSectionModel(
-                    title = "Who and What", lines = listOf(
-                        formLineModel(
-                            listOf(
-                                slotModel("John Doe"),
-                                slotModel("shot"),
-                                slotModel("John Smith"),
-                                slotText("with"),
-                                slotModel(".44 revolver"),
-                            )
-                        ),
-                        formLineModel(
-                            listOf(
-                                slotModel("John Doe"),
-                                slotModel("died"),
-                                slotText("of"),
-                                slotModel("gunshot wound"),
-                            )
-                        ),
-                        formLineModel(
-                            listOf(
-                                slotModel("John Doe"),
-                                slotModel("took"),
-                                slotModel("golden idol")
-                            )
-                        ),
+fun gameViewStateCompose() = GameViewState(
+    trayWords = listOf(
+        slottableModel("Jane Doe"),
+        slottableModel("stole"),
+        slottableModel("cheburek")
+    ),
+    sections = listOf(
+        oneElementSection(title = "When", value = "23-04-29"),
+        oneElementSection(title = "Where", value = "Apartment no. 34 of 246 Green Street"),
+        formSectionModel(
+            title = "Who and What", lines = listOf(
+                formLineModel(
+                    listOf(
+                        slotModel("John Doe"),
+                        slotModel("shot"),
+                        slotModel("John Smith"),
+                        slotText("with"),
+                        slotModel(".44 revolver"),
                     )
                 ),
-                oneLineSection(
-                    title = "Why", line = formLineModel(
-                        listOf(
-                            slotModel("John Smith"),
-                            slotModel("took"),
-                            slotModel("golden idol")
-                        )
+                formLineModel(
+                    listOf(
+                        slotModel("John Doe"),
+                        slotModel("died"),
+                        slotText("of"),
+                        slotModel("gunshot wound"),
+                    )
+                ),
+                formLineModel(
+                    listOf(
+                        slotModel("John Doe"),
+                        slotModel("took"),
+                        slotModel("golden idol")
                     )
                 ),
             )
         ),
+        oneLineSection(
+            title = "Why", line = formLineModel(
+                listOf(
+                    slotModel("John Smith"),
+                    slotModel("took"),
+                    slotModel("golden idol")
+                )
+            )
+        ),
+    )
+)
+
+@Preview
+@Composable
+fun GameScreenPreview() {
+    GameScreen(
+        state = gameViewStateCompose(),
         onAction = {}
     )
 }
 
 @Composable
 fun GameScreen(
-    state: GameViewStateNew,
+    state: ContentViewState,
     onAction: OnGameAction,
 ) {
     LongPressDraggable(modifier = Modifier.fillMaxSize()) {
-        when (state) {
+        when(state) {
+            is ConversationViewState -> ConversationScreen(state, onAction)
             is GameViewState -> ThinkingScreen(state, onAction)
         }
     }
