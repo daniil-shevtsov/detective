@@ -28,6 +28,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.daniil.shevtsov.detective.core.ui.GameTypography
 import com.daniil.shevtsov.detective.core.ui.Pallete
 import com.daniil.shevtsov.detective.feature.game.domain.GameAction
 import com.daniil.shevtsov.detective.feature.game.domain.SlotId
@@ -37,7 +38,6 @@ import com.daniil.shevtsov.detective.feature.game.presentation.DropTarget
 import com.daniil.shevtsov.detective.feature.game.presentation.FormLineModel
 import com.daniil.shevtsov.detective.feature.game.presentation.FormSectionModel
 import com.daniil.shevtsov.detective.feature.game.presentation.GameViewState
-import com.daniil.shevtsov.detective.feature.game.presentation.MotiveModel
 import com.daniil.shevtsov.detective.feature.game.presentation.SlotModel
 import com.daniil.shevtsov.detective.feature.game.presentation.SlottableModel
 import timber.log.Timber
@@ -251,7 +251,7 @@ fun FormSection(
             modifier = Modifier.background(Pallete.Page),
             verticalArrangement = spacedBy(4.dp)
         ) {
-            Text(title)
+            FormTitle(title)
             lines.forEach { line ->
                 FormLine(line, onDrop)
             }
@@ -262,11 +262,25 @@ fun FormSection(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = spacedBy(4.dp)
         ) {
-            Text(title)
+            FormTitle(title)
             FormLine(lines[0], onDrop)
         }
     }
 }
+
+@Composable
+fun FormTitle(
+    text: String,
+    modifier: Modifier = Modifier,
+) {
+    Text(
+        text = "$text:",
+        color = Pallete.PrintText,
+        fontFamily = GameTypography.Typewriter,
+        modifier = modifier.padding(end = 4.dp)
+    )
+}
+
 
 @Composable
 fun FormLine(
@@ -280,50 +294,6 @@ fun FormLine(
     ) {
         line.slots.forEach {
             Slot(it, onDrop)
-        }
-    }
-}
-
-@Composable
-fun SlotRow(
-    title: String,
-    slot: SlotModel,
-    onDrop: OnDrop,
-) {
-    SlotRow(title = title) {
-        Slot(slot, onDrop)
-    }
-}
-
-@Composable
-fun SlotRow(
-    title: String,
-    content: @Composable () -> Unit,
-) {
-    Row(
-        modifier = Modifier.background(Pallete.Page),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = spacedBy(4.dp)
-    ) {
-        Text(text = "$title:")
-        content.invoke()
-    }
-}
-
-@Composable
-fun Motive(
-    model: MotiveModel,
-    onDrop: OnDrop,
-) {
-    Row(
-        modifier = Modifier.background(Pallete.Page),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = spacedBy(4.dp)
-    ) {
-        with(model) {
-            Slot(model.subject, onDrop)
-            Slot(model.verb, onDrop)
-            Slot(model.objectNoun, onDrop)
         }
     }
 }
@@ -365,11 +335,15 @@ fun Slot(model: SlotModel, onDrop: OnDrop) {
                     .padding(4.dp),
                 contentAlignment = Alignment.Center
             ) {
-                Text(textAlign = TextAlign.Center, text = model.value.text)
+                Text(
+                    textAlign = TextAlign.Center,
+                    text = model.value.text,
+                    color = Pallete.BluePen2,
+                )
             }
 
             is SlotModel.Text -> {
-                Text(text = model.text)
+                Text(text = model.text, color = Pallete.BluePen2)
             }
         }
     }
