@@ -3,22 +3,28 @@ package com.daniil.shevtsov.detective.feature.game.domain
 import assertk.Assert
 import assertk.all
 import assertk.assertThat
-import assertk.assertions.*
+import assertk.assertions.any
+import assertk.assertions.containsExactly
+import assertk.assertions.extracting
+import assertk.assertions.index
+import assertk.assertions.isEmpty
+import assertk.assertions.isEqualTo
+import assertk.assertions.isInstanceOf
+import assertk.assertions.isNull
+import assertk.assertions.prop
 import assertk.assertions.support.expected
-import com.daniil.shevtsov.detective.feature.main.domain.AppState
-import com.daniil.shevtsov.detective.feature.main.domain.appState
 import org.junit.jupiter.api.Test
 
 internal class GameFunctionalCoreKtTest {
     @Test
     fun `init sanity check`() {
         val state = gameFunctionalCore(
-            state = appState(gameState = gameState()),
+            state = gameState(),
             action = GameAction.Init
         )
 
         assertThat(state)
-            .prop(AppState::gameState)
+
             .all {
                 prop(GameState::slottables).all {
                     allSlottableIdsAreUnique()
@@ -51,19 +57,17 @@ internal class GameFunctionalCoreKtTest {
         val slottable = slottable(id = 0L, value = "lol")
         val slot = slot(id = 1L, content = null)
         val state = gameFunctionalCore(
-            state = appState(
-                gameState = gameState(
-                    slottables = listOf(slottable),
-                    formSections = listOf(
-                        sectionWithLines("Lol", formLine(slot))
-                    )
-                ),
+            state = gameState(
+                slottables = listOf(slottable),
+                formSections = listOf(
+                    sectionWithLines("Lol", formLine(slot))
+                )
             ),
             action = GameAction.SlottableDrop(slotId = slot.id, slottableId = slottable.id)
         )
 
         assertThat(state)
-            .prop(AppState::gameState)
+
             .all {
                 slotHasSlottable(expectedSlotId = slot.id, expectedSlottableId = slottable.id)
                 prop(GameState::slottables).containsExactly(slottable)
@@ -76,19 +80,21 @@ internal class GameFunctionalCoreKtTest {
         val slottable = slottable(id = 1L, value = "lol")
         val slot = slot(id = 2L, content = oldSlottable)
         val state = gameFunctionalCore(
-            state = appState(
-                gameState = gameState(
-                    slottables = listOf(oldSlottable, slottable),
-                    formSections = listOf(
-                        sectionWithLines("Lol", formLine(slot))
-                    )
+            state = gameState(
+
+                slottables = listOf(oldSlottable, slottable),
+                formSections = listOf(
+                    sectionWithLines("Lol", formLine(slot))
                 )
             ),
-            action = GameAction.SlottableDrop(slotId = slot.id, slottableId = slottable.id)
+            action = GameAction.SlottableDrop(
+                slotId = slot.id,
+                slottableId = slottable.id
+            )
         )
 
         assertThat(state)
-            .prop(AppState::gameState)
+
             .all {
                 slotHasSlottable(expectedSlotId = slot.id, expectedSlottableId = slottable.id)
                 prop(GameState::slottables).containsExactly(oldSlottable, slottable)
@@ -98,12 +104,12 @@ internal class GameFunctionalCoreKtTest {
     @Test
     fun `should generate initial history`() {
         val state = gameFunctionalCore(
-            state = appState(gameState = gameState()),
+            state = gameState(),
             action = GameAction.Init
         )
 
         assertThat(state)
-            .prop(AppState::gameState)
+
             .all {
                 prop(GameState::actors)
                     .prop(Actors::list)

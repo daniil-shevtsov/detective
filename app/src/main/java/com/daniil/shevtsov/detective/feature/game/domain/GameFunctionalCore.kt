@@ -1,54 +1,49 @@
 package com.daniil.shevtsov.detective.feature.game.domain
 
-import com.daniil.shevtsov.detective.feature.main.domain.AppState
+import com.daniil.shevtsov.detective.core.navigation.Screen
 
 fun gameFunctionalCore(
-    state: AppState,
+    state: GameState,
     action: GameAction
-): AppState {
+): GameState {
     return when (action) {
         is GameAction.Init -> init(state)
         is GameAction.SlottableDrop -> onSlottableDrop(state, action)
     }
 }
 
-fun onSlottableDrop(state: AppState, action: GameAction.SlottableDrop): AppState {
-    val slotOfDrop = state.gameState.allSlots.find { slot -> slot.id == action.slotId }
+fun onSlottableDrop(state: GameState, action: GameAction.SlottableDrop): GameState {
+    val slotOfDrop = state.allSlots.find { slot -> slot.id == action.slotId }
     val droppedSlottable =
-        state.gameState.slottables.find { slottable -> slottable.id == action.slottableId }
+        state.slottables.find { slottable -> slottable.id == action.slottableId }
 
     return if (slotOfDrop != null && droppedSlottable != null) {
         state.copy(
-            gameState = state.gameState.copy(
-                slottables = state.gameState.slottables,
-                formSections = state.gameState.formSections.map { formSection ->
-                    formSection.copy(
-                        formLines = formSection.formLines.map { formLine ->
-                            formLine.copy(elements = formLine.elements.map { element ->
-                                when (element) {
-                                    is Slot -> when (element.id) {
-                                        slotOfDrop.id -> element.copy(content = droppedSlottable)
-                                        else -> element
-                                    }
+            slottables = state.slottables,
+            formSections = state.formSections.map { formSection ->
+                formSection.copy(
+                    formLines = formSection.formLines.map { formLine ->
+                        formLine.copy(elements = formLine.elements.map { element ->
+                            when (element) {
+                                is Slot -> when (element.id) {
+                                    slotOfDrop.id -> element.copy(content = droppedSlottable)
                                     else -> element
                                 }
-                            })
-                        }
-                    )
-                }
-            )
+
+                                else -> element
+                            }
+                        })
+                    }
+                )
+            }
         )
     } else {
         state
     }
 }
 
-private fun init(state: AppState): AppState {
-    return state.copy(
-        gameState = createInitialState()
-    )
-
-
+private fun init(state: GameState): GameState {
+    return createInitialState()
 }
 
 private fun List<FormSection>.makeSlotIdUnique(): List<FormSection> {
@@ -61,6 +56,7 @@ private fun List<FormSection>.makeSlotIdUnique(): List<FormSection> {
                         is Slot -> formElement.copy(
                             id = SlotId(idCounter++)
                         )
+
                         else -> formElement
                     }
                 })
@@ -205,6 +201,8 @@ private fun createInitialState(): GameState {
         history = History(events = emptyList()),
         actors = actors,
         keyWords = emptyList(),
+        screenStack = emptyList(),
+        currentScreen = Screen.Main
     )
 }
 

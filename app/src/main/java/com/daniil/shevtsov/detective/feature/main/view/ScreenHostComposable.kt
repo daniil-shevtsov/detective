@@ -10,6 +10,7 @@ import com.daniil.shevtsov.detective.core.navigation.GeneralViewAction
 import com.daniil.shevtsov.detective.core.navigation.ScreenHostViewModel
 import com.daniil.shevtsov.detective.core.navigation.ScreenViewAction
 import com.daniil.shevtsov.detective.core.navigation.ScreenViewState
+import com.daniil.shevtsov.detective.feature.game.presentation.conversationViewStateCompose
 import com.daniil.shevtsov.detective.feature.game.ui.GameScreen
 import com.daniil.shevtsov.detective.feature.game.ui.gameViewStateCompose
 
@@ -19,6 +20,10 @@ fun ScreenHostScreenPreview() {
     Row {
         ScreenHostScreen(
             state = ScreenViewState.Main(gameViewStateCompose()),
+            onAction = {}
+        )
+        ScreenHostScreen(
+            state = ScreenViewState.Main(conversationViewStateCompose()),
             onAction = {}
         )
     }

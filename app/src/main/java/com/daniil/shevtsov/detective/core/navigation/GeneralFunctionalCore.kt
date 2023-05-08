@@ -1,11 +1,11 @@
 package com.daniil.shevtsov.detective.core.navigation
 
-import com.daniil.shevtsov.detective.feature.main.domain.AppState
+import com.daniil.shevtsov.detective.feature.game.domain.GameState
 
 fun generalFunctionalCore(
-    state: AppState,
+    state: GameState,
     viewAction: GeneralViewAction,
-): AppState = when (viewAction) {
+): GameState = when (viewAction) {
     is GeneralViewAction.Open -> {
         val newStack = when {
             viewAction.shouldReplace -> state.screenStack.dropLast(1) + listOf(viewAction.screen)

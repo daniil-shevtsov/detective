@@ -1,13 +1,13 @@
 package com.daniil.shevtsov.detective.core.navigation
 
+import com.daniil.shevtsov.detective.feature.game.domain.GameState
 import com.daniil.shevtsov.detective.feature.game.domain.gameFunctionalCore
-import com.daniil.shevtsov.detective.feature.main.domain.AppState
 
 
 fun screenFunctionalCore(
-    state: AppState,
+    state: GameState,
     viewAction: ScreenViewAction,
-): AppState {
+): GameState {
     return when (viewAction) {
         is ScreenViewAction.General -> generalFunctionalCore(
             state = state,
