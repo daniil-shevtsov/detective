@@ -51,35 +51,55 @@ data class TextModel(
     val color: Color,
 )
 
+enum class KeyWordType {
+    Name,
+    Verb,
+    Noun,
+}
+
+fun String.splitKeeping(str: String): List<String> {
+    return this.split(str).flatMap {listOf(it, str)}.dropLast(1).filterNot {it.isEmpty()}
+}
+
+fun String.splitKeeping(vararg strs: String): List<String> {
+    var res = listOf(this)
+    strs.forEach {str ->
+        res = res.flatMap {it.splitKeeping(str)}
+    }
+    return res
+}
+
 @Preview
 @Composable
 fun GameScreenPreview() {
-    val textModels = listOf(
-        TextModel(
-            tag = "Name",
-            value = "John Doe:",
-            color = Color.White
-        ),
-        TextModel(
-            tag = "Text",
-            value = " I was with",
-            color = Color.Black
-        ),
-        TextModel(
-            tag = "Name2",
-            value = " John Smith",
-            color = Color.White
-        ),
+    val keyWords = mapOf(
+        "John Doe" to KeyWordType.Name,
+        "John Smith" to KeyWordType.Name,
+        "shot" to KeyWordType.Verb,
+        "gun" to KeyWordType.Noun,
     )
+    val textWithPlaceholders =
+        "John Doe: I was with John Smith\nJohn Doe: I shot John Smith with a gun"
+    val textModels = textWithPlaceholders.splitKeeping(*keyWords.keys.toTypedArray())
+        .mapIndexed { index, text ->
+            TextModel(
+                tag = "$text$index",
+                value = text,
+                color = when (keyWords[text]) {
+                    KeyWordType.Name -> Color.Green
+                    KeyWordType.Verb -> Color.Red
+                    KeyWordType.Noun -> Color.Magenta
+                    null -> Color.Black
+                }
+            )
+        }
 
     var clickedTags by remember { mutableStateOf(setOf<String>()) }
-    val tnc = "Terms and Condition"
-    val privacyPolicy = "Privacy policy"
     val annotatedString = buildAnnotatedString {
         textModels.forEach { textModel ->
             with(textModel) {
                 val color = when {
-                    clickedTags.contains(tag) -> Color.DarkGray
+                    clickedTags.contains(tag) -> color.copy(alpha = 0.5f)
                     else -> color
                 }
                 withStyle(style = SpanStyle(color = color)) {
@@ -88,17 +108,6 @@ fun GameScreenPreview() {
                 }
             }
         }
-//        append("I have read ")
-//        withStyle(style = SpanStyle(color = Color.Red)) {
-//            pushStringAnnotation(tag = tnc, annotation = tnc)
-//            append(tnc)
-//        }
-//        append(" and ")
-//        withStyle(style = SpanStyle(color = Color.Red)) {
-//            pushStringAnnotation(tag = privacyPolicy, annotation = privacyPolicy)
-//            append(privacyPolicy)
-//        }
-//        append(clickedText)
     }
     ClickableText(text = annotatedString, onClick = { offset ->
         annotatedString.getStringAnnotations(offset, offset)

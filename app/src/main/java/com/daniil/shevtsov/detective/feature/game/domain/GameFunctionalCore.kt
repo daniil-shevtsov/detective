@@ -204,6 +204,7 @@ private fun createInitialState(): GameState {
         slottables = slottables,
         history = History(events = emptyList()),
         actors = actors,
+        keyWords = emptyList(),
     )
 }
 
