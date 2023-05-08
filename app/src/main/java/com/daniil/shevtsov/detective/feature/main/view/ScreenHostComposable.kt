@@ -1,19 +1,28 @@
 package com.daniil.shevtsov.detective.feature.main.view
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.daniil.shevtsov.detective.core.navigation.GeneralViewAction
 import com.daniil.shevtsov.detective.core.navigation.ScreenHostViewModel
 import com.daniil.shevtsov.detective.core.navigation.ScreenViewAction
 import com.daniil.shevtsov.detective.core.navigation.ScreenViewState
+import com.daniil.shevtsov.detective.core.ui.Pallete
 import com.daniil.shevtsov.detective.feature.conversation.ui.ConversationScreen
 import com.daniil.shevtsov.detective.feature.game.domain.GameAction
 import com.daniil.shevtsov.detective.feature.game.presentation.ContentViewState
@@ -83,17 +92,52 @@ fun MainScreen(
     onAction: OnGameAction,
     modifier: Modifier = Modifier,
 ) {
-    Column(modifier = modifier) {
-        Row {
-            Text("Thinking")
-            Text("Conversation")
-        }
+    Column(modifier = modifier
+        .background(Pallete.Cover)
+        .padding(8.dp)
+        .background(Pallete.Cover2)
+        .padding(8.dp)
+        .background(Pallete.Cover3)
+        .padding(8.dp)
+        .background(Pallete.Cover4)
+        .padding(8.dp)
+    ) {
+        NavigationTabs(tabs = listOf("Thinking", "Conversation", "Map", "Log"))
         ScreenContent(
             state = state.content,
             onAction = onAction,
             modifier = modifier
         )
     }
+}
+
+@Composable
+fun NavigationTabs(tabs: List<String>, modifier: Modifier = Modifier) {
+    Row(
+        modifier = modifier
+            .background(Color.Gray)
+            .padding(bottom = 4.dp)
+            .background(Color.DarkGray)
+            .fillMaxWidth()
+    ) {
+        tabs.forEach { tab ->
+            NavigationTab(tab)
+        }
+    }
+}
+
+@Composable
+fun NavigationTab(title: String, modifier: Modifier = Modifier) {
+    Text(
+        text = title,
+        textAlign = TextAlign.Center,
+        fontWeight = FontWeight.Bold,
+        modifier = modifier
+            .padding(end = 2.dp)
+            .defaultMinSize(minWidth = 80.dp)
+            .background(Color.White)
+            .padding(8.dp)
+    )
 }
 
 @Composable

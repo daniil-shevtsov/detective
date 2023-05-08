@@ -6,6 +6,33 @@ import androidx.compose.ui.graphics.Color
 object Pallete {
 
     @Stable
+    val Page = Color(0xFFD9CDC1)
+
+    @Stable
+    val Cover = Color(0xFF66322E)
+
+    @Stable
+    val Cover2 = Color(0xFF674D40)
+
+    @Stable
+    val Cover3 = Color(0xFF885B3A)
+
+    @Stable
+    val Cover4 = Color(0xFF804D37)
+
+    @Stable
+    val BluePen = Color(0xFF293737)
+
+    @Stable
+    val BluePen2 = Color(0xFF01225E)
+
+    @Stable
+    val RedStamp = Color(0xFFCB363D)
+
+    @Stable
+    val PrintText = Color(0xFF2A2928)
+
+    @Stable
     val LightRed = Color(0xFFD64747)
 
     @Stable

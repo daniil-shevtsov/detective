@@ -28,6 +28,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.daniil.shevtsov.detective.core.ui.Pallete
 import com.daniil.shevtsov.detective.feature.game.domain.GameAction
 import com.daniil.shevtsov.detective.feature.game.domain.SlotId
 import com.daniil.shevtsov.detective.feature.game.domain.SlottableId
@@ -180,7 +181,7 @@ fun ThinkingScreen(
     state: GameViewState,
     onAction: (action: GameAction) -> Unit
 ) {
-    Column(modifier = Modifier.background(Color.Gray).fillMaxSize()) {
+    Column(modifier = Modifier.background(Pallete.Page).fillMaxSize()) {
         FillInForm(
             state = state,
             onDrop = { slotId, slottableId ->
@@ -215,7 +216,7 @@ fun TrayWord(model: SlottableModel) {
     DragTarget(modifier = Modifier, dataToDrop = model.id.raw) {
         Timber.d("Displaying $model with ${model.id} on drag")
         Text(
-            modifier = Modifier.background(Color.Gray).padding(8.dp),
+            modifier = Modifier.background(Pallete.Page).padding(8.dp),
             text = model.text
         )
     }
@@ -226,7 +227,7 @@ fun FillInForm(
     state: GameViewState,
     onDrop: OnDrop,
 ) {
-    Column(modifier = Modifier.background(Color.Gray), verticalArrangement = spacedBy(4.dp)) {
+    Column(modifier = Modifier.background(Pallete.Page), verticalArrangement = spacedBy(4.dp)) {
         with(state) {
             sections.forEach { section ->
                 FormSection(
@@ -247,7 +248,7 @@ fun FormSection(
 ) {
     if (lines.size > 1) {
         Column(
-            modifier = Modifier.background(Color.Gray),
+            modifier = Modifier.background(Pallete.Page),
             verticalArrangement = spacedBy(4.dp)
         ) {
             Text(title)
@@ -257,7 +258,7 @@ fun FormSection(
         }
     } else if (lines.size == 1) {
         Row(
-            modifier = Modifier.background(Color.Gray),
+            modifier = Modifier.background(Pallete.Page),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = spacedBy(4.dp)
         ) {
@@ -273,7 +274,7 @@ fun FormLine(
     onDrop: OnDrop,
 ) {
     Row(
-        modifier = Modifier.background(Color.Gray),
+        modifier = Modifier.background(Pallete.Page),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = spacedBy(4.dp)
     ) {
@@ -300,7 +301,7 @@ fun SlotRow(
     content: @Composable () -> Unit,
 ) {
     Row(
-        modifier = Modifier.background(Color.Gray),
+        modifier = Modifier.background(Pallete.Page),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = spacedBy(4.dp)
     ) {
@@ -315,7 +316,7 @@ fun Motive(
     onDrop: OnDrop,
 ) {
     Row(
-        modifier = Modifier.background(Color.Gray),
+        modifier = Modifier.background(Pallete.Page),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = spacedBy(4.dp)
     ) {
@@ -360,7 +361,7 @@ fun Slot(model: SlotModel, onDrop: OnDrop) {
                     .padding(1.dp)
                     .background(Color.Black)
                     .padding(4.dp)
-                    .background(Color.Gray)
+                    .background(Pallete.Page)
                     .padding(4.dp),
                 contentAlignment = Alignment.Center
             ) {
