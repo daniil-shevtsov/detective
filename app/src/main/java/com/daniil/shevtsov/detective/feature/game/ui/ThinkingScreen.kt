@@ -140,7 +140,7 @@ fun gameViewStateCompose() = GameViewState(
                 ),
                 formLineModel(
                     listOf(
-                        slotModel("John Doe"),
+                        slotModel("John Smith"),
                         slotModel("died"),
                         slotText("of"),
                         slotModel("gunshot wound"),
@@ -212,9 +212,7 @@ fun WordTray(
 
 @Composable
 fun TrayWord(model: SlottableModel) {
-    Timber.d("TrayWord with id ${model.id}")
     DragTarget(modifier = Modifier, dataToDrop = model.id.raw) {
-        Timber.d("Displaying $model with ${model.id} on drag")
         Text(
             modifier = Modifier.background(Pallete.Page).padding(8.dp),
             text = model.text
@@ -321,32 +319,45 @@ fun Slot(model: SlotModel, onDrop: OnDrop) {
                     .background(Color.Black)
                     .padding(4.dp)
             ) {
-                Text("")
+                HandWritten("")
             }
 
             is SlotModel.Set -> Box(
                 modifier = Modifier
-                    .defaultMinSize(minWidth = 60.dp)
-                    .background(Color.DarkGray)
-                    .padding(1.dp)
-                    .background(Color.Black)
-                    .padding(4.dp)
-                    .background(Pallete.Page)
-                    .padding(4.dp),
+                    .defaultMinSize(minWidth = 60.dp),
+//                    .background(Color.DarkGray)
+//                    .padding(1.dp)
+//                    .background(Color.Black)
+//                    .padding(4.dp)
+//                    .background(Pallete.Page)
+//                    .padding(4.dp),
                 contentAlignment = Alignment.Center
             ) {
-                Text(
-                    textAlign = TextAlign.Center,
+                HandWritten(
                     text = model.value.text,
-                    color = Pallete.BluePen2,
                 )
             }
 
             is SlotModel.Text -> {
-                Text(text = model.text, color = Pallete.BluePen2)
+                HandWritten(text = model.text)
             }
         }
     }
+}
+
+@Composable
+fun HandWritten(
+    text: String,
+    modifier: Modifier = Modifier,
+    textAlign: TextAlign = TextAlign.Center,
+) {
+    Text(
+        text = text,
+        color = Pallete.BluePen2,
+        textAlign = textAlign,
+        fontFamily = GameTypography.Pen,
+        modifier = modifier,
+    )
 }
 
 private fun slottableModel(text: String) = SlottableModel(

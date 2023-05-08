@@ -6,4 +6,5 @@ import com.daniil.shevtsov.detective.R
 
 object GameTypography {
     val Typewriter = FontFamily(Font(R.font.typewriter))
+    val Pen = FontFamily(Font(R.font.pen))
 }
