@@ -92,15 +92,16 @@ fun MainScreen(
     onAction: OnGameAction,
     modifier: Modifier = Modifier,
 ) {
-    Column(modifier = modifier
-        .background(Pallete.Cover)
-        .padding(8.dp)
-        .background(Pallete.Cover2)
-        .padding(8.dp)
-        .background(Pallete.Cover3)
-        .padding(8.dp)
-        .background(Pallete.Cover4)
-        .padding(8.dp)
+    Column(
+        modifier = modifier
+            .background(Pallete.Cover)
+            .padding(8.dp)
+            .background(Pallete.Cover2)
+            .padding(8.dp)
+            .background(Pallete.Cover3)
+            .padding(8.dp)
+            .background(Pallete.Cover4)
+            .padding(8.dp)
     ) {
         NavigationTabs(tabs = listOf("Thinking", "Conversation", "Map", "Log"))
         ScreenContent(
@@ -120,14 +121,18 @@ fun NavigationTabs(tabs: List<String>, modifier: Modifier = Modifier) {
             .background(Color.DarkGray)
             .fillMaxWidth()
     ) {
-        tabs.forEach { tab ->
-            NavigationTab(tab)
+        tabs.forEachIndexed { index, tab ->
+            NavigationTab(tab, index)
         }
     }
 }
 
 @Composable
-fun NavigationTab(title: String, modifier: Modifier = Modifier) {
+fun NavigationTab(
+    title: String,
+    index: Int,
+    modifier: Modifier = Modifier
+) {
     Text(
         text = title,
         textAlign = TextAlign.Center,
@@ -135,7 +140,15 @@ fun NavigationTab(title: String, modifier: Modifier = Modifier) {
         modifier = modifier
             .padding(end = 2.dp)
             .defaultMinSize(minWidth = 80.dp)
-            .background(Color.White)
+            .background(
+                when (index) {
+                    0 -> Pallete.Page
+                    1 -> Pallete.Page2
+                    2 -> Pallete.Page3
+                    3 -> Pallete.Page4
+                    else -> Pallete.Page
+                }
+            )
             .padding(8.dp)
     )
 }
