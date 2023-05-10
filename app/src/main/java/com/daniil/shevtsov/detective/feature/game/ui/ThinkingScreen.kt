@@ -4,9 +4,12 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement.Absolute.spacedBy
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
@@ -132,7 +135,7 @@ fun gameViewStateCompose() = GameViewState(
                 formLineModel(
                     listOf(
                         slotModel("John Doe"),
-                        slotModel("shot"),
+                        slotEmpty(),
                         slotModel("John Smith"),
                         slotText("with"),
                         slotModel(".44 revolver"),
@@ -310,31 +313,35 @@ fun Slot(model: SlotModel, onDrop: OnDrop) {
         }
         when (model) {
             is SlotModel.Empty -> Box(
+                contentAlignment = Alignment.BottomCenter,
                 modifier = Modifier
-                    .width(80.dp)
-                    .background(Color.DarkGray)
-                    .padding(1.dp)
-                    .background(Color.Black)
-                    .padding(4.dp)
-                    .background(Color.Black)
-                    .padding(4.dp)
+                    .defaultMinSize(minWidth = 60.dp)
+                    .background(Pallete.Page),
             ) {
                 HandWritten("")
+                Box(modifier = Modifier
+                    .padding(bottom = 4.dp)
+                    .background(Pallete.BluePen2)
+                    .height(1.dp)
+                    .width(60.dp)
+                )
             }
 
             is SlotModel.Set -> Box(
+                contentAlignment = Alignment.BottomCenter,
                 modifier = Modifier
-                    .defaultMinSize(minWidth = 60.dp),
-//                    .background(Color.DarkGray)
-//                    .padding(1.dp)
-//                    .background(Color.Black)
-//                    .padding(4.dp)
-//                    .background(Pallete.Page)
-//                    .padding(4.dp),
-                contentAlignment = Alignment.Center
+                    .defaultMinSize(minWidth = 60.dp)
+                    .width(IntrinsicSize.Max)
+                    .background(Pallete.Page),
             ) {
                 HandWritten(
                     text = model.value.text,
+                )
+                Box(modifier = Modifier
+                    .padding(bottom = 4.dp)
+                    .background(Pallete.BluePen2)
+                    .height(1.dp)
+                    .fillMaxWidth()
                 )
             }
 
@@ -391,3 +398,5 @@ private fun slotModel(text: String) = SlotModel.Set(
 )
 
 private fun slotText(text: String) = SlotModel.Text(SlotId(0L), text)
+
+private fun slotEmpty() = SlotModel.Empty(SlotId(0L))
