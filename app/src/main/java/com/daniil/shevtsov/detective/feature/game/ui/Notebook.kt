@@ -23,6 +23,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import com.daniil.shevtsov.detective.core.ui.Pallete
+import com.daniil.shevtsov.detective.feature.main.view.ScreenContent
 
 @Composable
 @Preview(widthDp = 1000, heightDp = 600)
@@ -39,22 +40,49 @@ fun Notebook() {
             .background(Pallete.Cover2)
             .padding(16.dp)
     ) {
-        Pages()
+        Pages(
+            firstPage = {
+                ScreenContent(
+                    state = gameViewStateCompose(),
+                    onAction = {},
+                )
+            },
+            secondPage = {
+                ScreenContent(
+                    state = gameViewStateCompose(),
+                    onAction = {},
+                )
+            }
+        )
     }
 }
 
 @Composable
-fun Pages(modifier: Modifier = Modifier) {
+fun Pages(
+    modifier: Modifier = Modifier,
+    firstPage: @Composable () -> Unit,
+    secondPage: @Composable () -> Unit,
+) {
     Box(
         contentAlignment = Alignment.Center,
         modifier = modifier
             .height(IntrinsicSize.Min)
+            .width(IntrinsicSize.Min)
     ) {
         Row(
             modifier = Modifier,
         ) {
-            Page(place = PagePlace.First)
-            Page(place = PagePlace.Second)
+            val bindingPadding = 20.dp
+            Page(
+                place = PagePlace.First,
+                content = firstPage,
+                modifier = Modifier.weight(1f).padding(end = bindingPadding)
+            )
+            Page(
+                place = PagePlace.Second,
+                content = secondPage,
+                modifier = Modifier.weight(1f).padding(start = bindingPadding)
+            )
         }
         Binding(modifier.fillMaxHeight())
     }
@@ -68,22 +96,41 @@ enum class PagePlace {
 @Composable
 fun Page(
     place: PagePlace,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    content: @Composable () -> Unit,
 ) {
-    val possibleColors = listOf(Pallete.Page, Pallete.PageDark, Pallete.PageVeryDark)
+    val possibleColors = listOf(Color.Blue, Color.Yellow, Color.Red)
+//    val possibleColors = listOf(Pallete.Page, Pallete.PageDark, Pallete.PageVeryDark)
     val colors = when (place) {
         PagePlace.First -> possibleColors
         PagePlace.Second -> possibleColors.reversed()
     }
-    val pageSize = DpSize(200.dp, 400.dp)
+    //val pageSize = DpSize(200.dp, 400.dp)
 
-    val pageWidth = with(LocalDensity.current) {
-        pageSize.width.toPx()
+//    val pageWidth = with(LocalDensity.current) {
+//        pageSize.width.toPx()
+//    }
+    val shadowWidth = with(LocalDensity.current) {
+        100.dp.toPx()
     }
     val range = when (place) {
-        PagePlace.First -> IntRange(start = 400, endInclusive = pageWidth.toInt())
-        PagePlace.Second -> IntRange(start = 0, endInclusive = pageWidth.toInt() - 400)
+        PagePlace.First -> IntRange(start = 0, endInclusive = shadowWidth.toInt())
+        PagePlace.Second -> IntRange(start = 0, endInclusive = shadowWidth.toInt() - 400)
     }
+    val colorStops = when(place) {
+        PagePlace.First -> arrayOf(
+            0.0f to colors[0],
+            0.9f to colors[1],
+            1f to colors[2],
+        )
+        PagePlace.Second -> arrayOf(
+            0.0f to colors[0],
+            0.1f to colors[1],
+            1f to colors[2],
+        )
+    }
+
+
     Box(
         modifier = modifier
             .background(Pallete.Page3)
@@ -92,12 +139,14 @@ fun Page(
             .padding(bottom = 1.dp)
             .background(
                 Brush.horizontalGradient(
-                    colors = colors,
-                    startX = range.start.toFloat(),
-                    endX = range.endInclusive.toFloat(),
+                    colorStops = *colorStops,
                 )
-            ).size(pageSize)
-    )
+            )
+            .width(IntrinsicSize.Min)
+            .height(IntrinsicSize.Min)
+    ) {
+        content()
+    }
 }
 
 @Composable

@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.defaultMinSize
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -184,7 +183,7 @@ fun ThinkingScreen(
     state: GameViewState,
     onAction: (action: GameAction) -> Unit
 ) {
-    Column(modifier = Modifier.background(Pallete.Page).fillMaxSize()) {
+    Column(modifier = Modifier) {
         FillInForm(
             state = state,
             onDrop = { slotId, slottableId ->
@@ -217,7 +216,7 @@ fun WordTray(
 fun TrayWord(model: SlottableModel) {
     DragTarget(modifier = Modifier, dataToDrop = model.id.raw) {
         Text(
-            modifier = Modifier.background(Pallete.Page).padding(8.dp),
+            modifier = Modifier.padding(8.dp),
             text = model.text
         )
     }
@@ -228,7 +227,7 @@ fun FillInForm(
     state: GameViewState,
     onDrop: OnDrop,
 ) {
-    Column(modifier = Modifier.background(Pallete.Page), verticalArrangement = spacedBy(4.dp)) {
+    Column(modifier = Modifier, verticalArrangement = spacedBy(4.dp)) {
         with(state) {
             sections.forEach { section ->
                 FormSection(
@@ -249,7 +248,7 @@ fun FormSection(
 ) {
     if (lines.size > 1) {
         Column(
-            modifier = Modifier.background(Pallete.Page),
+            modifier = Modifier,
             verticalArrangement = spacedBy(4.dp)
         ) {
             FormTitle(title)
@@ -259,7 +258,7 @@ fun FormSection(
         }
     } else if (lines.size == 1) {
         Row(
-            modifier = Modifier.background(Pallete.Page),
+            modifier = Modifier,
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = spacedBy(4.dp)
         ) {
@@ -289,7 +288,7 @@ fun FormLine(
     onDrop: OnDrop,
 ) {
     Row(
-        modifier = Modifier.background(Pallete.Page),
+        modifier = Modifier,
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = spacedBy(4.dp)
     ) {
@@ -316,7 +315,7 @@ fun Slot(model: SlotModel, onDrop: OnDrop) {
                 contentAlignment = Alignment.BottomCenter,
                 modifier = Modifier
                     .defaultMinSize(minWidth = 60.dp)
-                    .background(Pallete.Page),
+                    ,
             ) {
                 HandWritten("")
                 Box(modifier = Modifier
@@ -332,7 +331,7 @@ fun Slot(model: SlotModel, onDrop: OnDrop) {
                 modifier = Modifier
                     .defaultMinSize(minWidth = 60.dp)
                     .width(IntrinsicSize.Max)
-                    .background(Pallete.Page),
+                    ,
             ) {
                 HandWritten(
                     text = model.value.text,
