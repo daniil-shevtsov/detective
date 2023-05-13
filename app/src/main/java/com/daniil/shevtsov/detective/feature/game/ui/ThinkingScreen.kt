@@ -183,7 +183,40 @@ fun ThinkingScreen(
     state: GameViewState,
     onAction: (action: GameAction) -> Unit
 ) {
-    Column(modifier = Modifier) {
+    Box(
+        modifier = Modifier
+            .background(Pallete.Cover2)
+            .padding(16.dp)
+            .width(IntrinsicSize.Min)
+            .height(IntrinsicSize.Min)
+    ) {
+        val bindingPadding = 16.dp
+        Pages(
+            firstPage = {
+                ThinkingPage(
+                    state = state,
+                    modifier = Modifier.padding(end = bindingPadding).padding(8.dp),
+                    onAction = onAction,
+                )
+            },
+            secondPage = {
+                ThinkingPage(
+                    state = state,
+                    modifier = Modifier.padding(start = bindingPadding).padding(8.dp),
+                    onAction = onAction,
+                )
+            }
+        )
+    }
+}
+
+@Composable
+fun ThinkingPage(
+    state: GameViewState,
+    modifier: Modifier = Modifier,
+    onAction: (action: GameAction) -> Unit,
+) {
+    Column(modifier = modifier) {
         FillInForm(
             state = state,
             onDrop = { slotId, slottableId ->

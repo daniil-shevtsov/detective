@@ -2,7 +2,6 @@ package com.daniil.shevtsov.detective.feature.main.view
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
@@ -92,24 +91,29 @@ fun MainScreen(
     onAction: OnGameAction,
     modifier: Modifier = Modifier,
 ) {
-    Column(
+    ScreenContent(
+        state = state.content,
+        onAction = onAction,
         modifier = modifier
-            .background(Pallete.Cover)
-            .padding(8.dp)
-            .background(Pallete.Cover2)
-            .padding(8.dp)
-            .background(Pallete.Cover3)
-            .padding(8.dp)
-            .background(Pallete.Cover4)
-            .padding(8.dp)
-    ) {
-        NavigationTabs(tabs = listOf("Thinking", "Conversation", "Map", "Log"))
-        ScreenContent(
-            state = state.content,
-            onAction = onAction,
-            modifier = modifier
-        )
-    }
+    )
+//    Column(
+//        modifier = modifier
+//            .background(Pallete.Cover)
+//            .padding(8.dp)
+//            .background(Pallete.Cover2)
+//            .padding(8.dp)
+//            .background(Pallete.Cover3)
+//            .padding(8.dp)
+//            .background(Pallete.Cover4)
+//            .padding(8.dp)
+//    ) {
+//        NavigationTabs(tabs = listOf("Thinking", "Conversation", "Map", "Log"))
+//        ScreenContent(
+//            state = state.content,
+//            onAction = onAction,
+//            modifier = modifier
+//        )
+//    }
 }
 
 @Composable
