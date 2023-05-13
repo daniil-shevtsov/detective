@@ -9,6 +9,12 @@ object Pallete {
     val Page = Color(0xFFD9CDC1)
 
     @Stable
+    val PageDark = Color(0xFFD0C4B8)
+
+    @Stable
+    val PageVeryDark = Color(0xFFC4BAB0)
+
+    @Stable
     val Page2 = Color(0xFFD7CBA1)
 
     @Stable
