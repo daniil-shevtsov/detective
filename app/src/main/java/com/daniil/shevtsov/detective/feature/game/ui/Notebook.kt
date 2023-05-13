@@ -26,51 +26,74 @@ import com.daniil.shevtsov.detective.core.ui.Pallete
 @Preview(widthDp = 1000, heightDp = 600)
 fun Notebook() {
     Box {
-        val kek = Color(0xFF3E1D1D)
-        Box(contentAlignment = Alignment.Center, modifier = Modifier.height(IntrinsicSize.Min)) {
-            Row(
-                modifier = Modifier
-                    .background(Pallete.Cover2)
-                    .padding(16.dp)
-            ) {
-                val pageSize = DpSize(200.dp, 400.dp)
-                Box(modifier = Modifier.background(Pallete.Page).size(pageSize))
-                Box(
-                    modifier = Modifier
-                        .background(kek)
-                        .size(width = 8.dp, height = pageSize.height)
-                )
+        Pages()
+    }
+}
 
-                Box(modifier = Modifier.background(Pallete.Page).size(pageSize))
-            }
-            Column(
-                modifier = Modifier.fillMaxHeight().padding(vertical = 8.dp),
-                verticalArrangement = SpaceEvenly
-            ) {
-                repeat(16) {
-                    Box(
-                        modifier = Modifier.width(IntrinsicSize.Min),
-                        contentAlignment = Alignment.Center,
+@Composable
+fun Pages(modifier: Modifier = Modifier) {
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = modifier
+            .height(IntrinsicSize.Min)
+            .background(Pallete.Cover2)
+            .padding(16.dp)
+    ) {
+        Row(
+            modifier = Modifier,
+        ) {
+            Page()
+            Page()
+        }
+        Binding(modifier.fillMaxHeight())
+    }
+}
+
+@Composable
+fun Page(modifier: Modifier = Modifier) {
+    val pageSize = DpSize(200.dp, 400.dp)
+    Box(modifier = modifier.background(Pallete.Page).size(pageSize))
+}
+
+@Composable
+fun Binding(modifier: Modifier = Modifier) {
+    Box(
+        modifier = modifier.height(IntrinsicSize.Min),
+        contentAlignment = Alignment.Center
+    ) {
+        Box(
+            modifier = Modifier
+                .background(Color(0xFF3E1D1D))
+                .width(8.dp)
+                .fillMaxHeight()
+        )
+        Column(
+            modifier = modifier.fillMaxHeight().padding(vertical = 0.dp),
+            verticalArrangement = SpaceEvenly
+        ) {
+            repeat(18) {
+                Box(
+                    modifier = Modifier.width(IntrinsicSize.Min),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    val holeSize = DpSize(6.dp, 6.dp)
+                    Row(
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        modifier = Modifier.fillMaxWidth()
                     ) {
-                        val holeSize = DpSize(6.dp, 6.dp)
-                        Row(
-                            horizontalArrangement = Arrangement.SpaceBetween,
-                            modifier = Modifier.fillMaxWidth()
-                        ) {
-                            PerforatedHole(holeSize)
-                            PerforatedHole(holeSize)
-                        }
-                        Box(
-                            Modifier
-                                .padding(horizontal = holeSize.width / 2)
-                                .background(Color(0xFFcfc07d))
-                                .padding(top = 0.5.dp)
-                                .background(Color(0xFF131007))
-                                .padding(bottom = 0.5.dp)
-                                .background(Color(0xFF564C20))
-                                .size(width = 28.dp, height = 4.dp)
-                        )
+                        PerforatedHole(holeSize)
+                        PerforatedHole(holeSize)
                     }
+                    Box(
+                        Modifier
+                            .padding(horizontal = holeSize.width / 2)
+                            .background(Color(0xFFcfc07d))
+                            .padding(top = 0.5.dp)
+                            .background(Color(0xFF131007))
+                            .padding(bottom = 0.5.dp)
+                            .background(Color(0xFF564C20))
+                            .size(width = 28.dp, height = 4.dp)
+                    )
                 }
             }
         }
