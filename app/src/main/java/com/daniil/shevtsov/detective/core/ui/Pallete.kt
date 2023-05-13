@@ -12,7 +12,7 @@ object Pallete {
     val PageDark = Color(0xFFD0C4B8)
 
     @Stable
-    val PageVeryDark = Color(0xFFC4BAB0)
+    val PageVeryDark = Color(0xFFAEA59B)
 
     @Stable
     val Page2 = Color(0xFFD7CBA1)

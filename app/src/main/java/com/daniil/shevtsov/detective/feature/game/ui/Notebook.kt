@@ -16,7 +16,9 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
@@ -24,8 +26,19 @@ import com.daniil.shevtsov.detective.core.ui.Pallete
 
 @Composable
 @Preview(widthDp = 1000, heightDp = 600)
-fun Notebook() {
+fun NotebookPreview() {
     Box {
+        Notebook()
+    }
+}
+
+@Composable
+fun Notebook() {
+    Box(
+        modifier = Modifier
+            .background(Pallete.Cover2)
+            .padding(16.dp)
+    ) {
         Pages()
     }
 }
@@ -36,23 +49,55 @@ fun Pages(modifier: Modifier = Modifier) {
         contentAlignment = Alignment.Center,
         modifier = modifier
             .height(IntrinsicSize.Min)
-            .background(Pallete.Cover2)
-            .padding(16.dp)
     ) {
         Row(
             modifier = Modifier,
         ) {
-            Page()
-            Page()
+            Page(place = PagePlace.First)
+            Page(place = PagePlace.Second)
         }
         Binding(modifier.fillMaxHeight())
     }
 }
 
+enum class PagePlace {
+    First,
+    Second,
+}
+
 @Composable
-fun Page(modifier: Modifier = Modifier) {
+fun Page(
+    place: PagePlace,
+    modifier: Modifier = Modifier
+) {
+    val possibleColors = listOf(Pallete.Page, Pallete.PageDark, Pallete.PageVeryDark)
+    val colors = when (place) {
+        PagePlace.First -> possibleColors
+        PagePlace.Second -> possibleColors.reversed()
+    }
     val pageSize = DpSize(200.dp, 400.dp)
-    Box(modifier = modifier.background(Pallete.Page).size(pageSize))
+
+    val pageWidth = with(LocalDensity.current) {
+        pageSize.width.toPx()
+    }
+    val range = when (place) {
+        PagePlace.First -> IntRange(start = 400, endInclusive = pageWidth.toInt())
+        PagePlace.Second -> IntRange(start = 0, endInclusive = pageWidth.toInt() - 400)
+    }
+    Box(
+        modifier = modifier
+            .background(Pallete.Page3)
+            .padding(top = 1.dp, start = 1.dp, bottom = 1.dp)
+            .background(Pallete.Page4)
+            .padding(bottom = 1.dp)
+            .background(
+                Brush.horizontalGradient(
+                    colors = colors,
+                    startX = range.start.toFloat(),
+                    endX = range.endInclusive.toFloat(),
+                )
+            ).size(pageSize)
+    )
 }
 
 @Composable
@@ -68,7 +113,7 @@ fun Binding(modifier: Modifier = Modifier) {
                 .fillMaxHeight()
         )
         Column(
-            modifier = modifier.fillMaxHeight().padding(vertical = 0.dp),
+            modifier = modifier.fillMaxHeight(),
             verticalArrangement = SpaceEvenly
         ) {
             repeat(18) {
