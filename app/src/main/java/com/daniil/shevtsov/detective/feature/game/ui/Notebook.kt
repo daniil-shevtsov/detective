@@ -40,16 +40,19 @@ fun Notebook() {
             .background(Pallete.Cover2)
             .padding(16.dp)
     ) {
+        val bindingPadding = 16.dp
         Pages(
             firstPage = {
                 ScreenContent(
                     state = gameViewStateCompose(),
+                    modifier = Modifier.padding(end = bindingPadding).padding(8.dp),
                     onAction = {},
                 )
             },
             secondPage = {
                 ScreenContent(
                     state = gameViewStateCompose(),
+                    modifier = Modifier.padding(start = bindingPadding).padding(8.dp),
                     onAction = {},
                 )
             }
@@ -72,16 +75,15 @@ fun Pages(
         Row(
             modifier = Modifier,
         ) {
-            val bindingPadding = 20.dp
             Page(
                 place = PagePlace.First,
                 content = firstPage,
-                modifier = Modifier.weight(1f).padding(end = bindingPadding)
+                modifier = Modifier.weight(1f)
             )
             Page(
                 place = PagePlace.Second,
                 content = secondPage,
-                modifier = Modifier.weight(1f).padding(start = bindingPadding)
+                modifier = Modifier.weight(1f)
             )
         }
         Binding(modifier.fillMaxHeight())
@@ -99,8 +101,8 @@ fun Page(
     modifier: Modifier = Modifier,
     content: @Composable () -> Unit,
 ) {
-    val possibleColors = listOf(Color.Blue, Color.Yellow, Color.Red)
-//    val possibleColors = listOf(Pallete.Page, Pallete.PageDark, Pallete.PageVeryDark)
+//    val possibleColors = listOf(Color.Blue, Color.Yellow, Color.Red)
+    val possibleColors = listOf(Pallete.Page, Pallete.PageDark, Pallete.PageVeryDark)
     val colors = when (place) {
         PagePlace.First -> possibleColors
         PagePlace.Second -> possibleColors.reversed()
@@ -139,7 +141,7 @@ fun Page(
             .padding(bottom = 1.dp)
             .background(
                 Brush.horizontalGradient(
-                    colorStops = *colorStops,
+                    colorStops = colorStops,
                 )
             )
             .width(IntrinsicSize.Min)

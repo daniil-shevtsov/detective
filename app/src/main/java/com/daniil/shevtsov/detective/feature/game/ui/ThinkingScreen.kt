@@ -190,19 +190,19 @@ fun ThinkingScreen(
                 onAction(GameAction.SlottableDrop(slotId, slottableId))
             }
         )
-        WordTray(state)
+        WordTray(state, modifier = Modifier.padding(8.dp))
     }
 }
 
 @Composable
 fun WordTray(
-    state: GameViewState
+    state: GameViewState,
+    modifier: Modifier = Modifier,
 ) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .verticalScroll(rememberScrollState())
-            .padding(8.dp)
-            .background(Color.DarkGray)
+            .background(Color(0xFFF9F9F9))
             .padding(4.dp),
         verticalArrangement = spacedBy(4.dp)
     ) {
@@ -215,9 +215,9 @@ fun WordTray(
 @Composable
 fun TrayWord(model: SlottableModel) {
     DragTarget(modifier = Modifier, dataToDrop = model.id.raw) {
-        Text(
-            modifier = Modifier.padding(8.dp),
-            text = model.text
+        HandWritten(
+            text = model.text,
+            modifier = Modifier.padding(8.dp)
         )
     }
 }
@@ -314,15 +314,15 @@ fun Slot(model: SlotModel, onDrop: OnDrop) {
             is SlotModel.Empty -> Box(
                 contentAlignment = Alignment.BottomCenter,
                 modifier = Modifier
-                    .defaultMinSize(minWidth = 60.dp)
-                    ,
+                    .defaultMinSize(minWidth = 60.dp),
             ) {
                 HandWritten("")
-                Box(modifier = Modifier
-                    .padding(bottom = 4.dp)
-                    .background(Pallete.BluePen2)
-                    .height(1.dp)
-                    .width(60.dp)
+                Box(
+                    modifier = Modifier
+                        .padding(bottom = 4.dp)
+                        .background(Pallete.BluePen2)
+                        .height(1.dp)
+                        .width(60.dp)
                 )
             }
 
@@ -330,17 +330,17 @@ fun Slot(model: SlotModel, onDrop: OnDrop) {
                 contentAlignment = Alignment.BottomCenter,
                 modifier = Modifier
                     .defaultMinSize(minWidth = 60.dp)
-                    .width(IntrinsicSize.Max)
-                    ,
+                    .width(IntrinsicSize.Max),
             ) {
                 HandWritten(
                     text = model.value.text,
                 )
-                Box(modifier = Modifier
-                    .padding(bottom = 4.dp)
-                    .background(Pallete.BluePen2)
-                    .height(1.dp)
-                    .fillMaxWidth()
+                Box(
+                    modifier = Modifier
+                        .padding(bottom = 4.dp)
+                        .background(Pallete.BluePen2)
+                        .height(1.dp)
+                        .fillMaxWidth()
                 )
             }
 
