@@ -1,8 +1,11 @@
+//import info.solidsoft.gradle.pitest.PitestPluginExtension
+
 plugins {
     id("com.android.application")
     id("kotlin-android")
     id("org.jetbrains.kotlin.kapt")
     id("androidx.navigation.safeargs.kotlin")
+//    id("info.solidsoft.pitest")
 }
 
 android {
@@ -82,13 +85,11 @@ dependencies {
     }
 
     with(Deps.Compose) {
-//        implementation(ui)
         implementation(uiGraphics)
         implementation(uiTooling)
         implementation(foundationLayout)
         implementation(materialExtended)
         implementation(material)
-//        implementation(navigation)
     }
 
     with(Deps.Koin) {
@@ -108,5 +109,26 @@ dependencies {
         testImplementation(mockk)
         testImplementation(mockkAgent)
         testImplementation(turbine)
+//        testImplementation(pitest)
     }
 }
+
+
+
+
+//plugins.withId("info.solidsoft.pitest") {
+//    configure<info.solidsoft.gradle.pitest.PitestPluginExtension> {
+//        junit5PluginVersion.set("0.12")
+//////                verbose.set(true)
+//////        jvmArgs.set(listOf("-Xmx512m")) // necessary on CI
+//////        avoidCallsTo.set(setOf("kotlin.jvm.internal", "kotlin.Result"))
+//////        excludedTestClasses.set(setOf("failgood.MultiThreadingPerformanceTest*"))
+//////        targetClasses.set(setOf("failgood.*")) // by default "${project.group}.*"
+//////        targetTests.set(setOf("failgood.*Test", "failgood.**.*Test"))
+//////        pitestVersion.set(failgood.versions.pitestVersion)
+//////        threads.set(
+//////            System.getenv("PITEST_THREADS")?.toInt() ?: Runtime.getRuntime().availableProcessors()
+//////        )
+//////        outputFormats.set(setOf("XML", "HTML"))
+//    }
+//}

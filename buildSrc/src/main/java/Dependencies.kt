@@ -108,6 +108,8 @@ object Deps {
         const val turbine = "app.cash.turbine:turbine:${Versions.turbine}"
         const val coroutinesTest =
             "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.0"
+
+//        const val pitest = "org.pitest:pitest:1.13.0"
     }
 
 }
