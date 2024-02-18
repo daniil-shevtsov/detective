@@ -1,5 +1,5 @@
 //plugins {
-//    id("info.solidsoft.pitest") apply false
+//    id("info.solidsoft.pitest")
 //}
 
 buildscript {
@@ -23,9 +23,10 @@ buildscript {
             classpath(shadow)
             classpath(kotlinter)
             classpath(safeArgs)
-//            classpath("info.solidsoft.gradle.pitest:gradle-pitest-plugin:1.9.0")
+            classpath("info.solidsoft.gradle.pitest:gradle-pitest-plugin:1.9.0")
         }
     }
+
 }
 
 allprojects {
@@ -39,20 +40,5 @@ allprojects {
         maven(url = "https://dl.bintray.com/korlibs/korlibs")
     }
 //
-//    plugins.withId("info.solidsoft.pitest") {
-//        configure<info.solidsoft.gradle.pitest.PitestPluginExtension> {
-//            jvmArgs.set(listOf("-Xmx512m"))
-//            testPlugin.set("junit5")
-//            avoidCallsTo.set(setOf("kotlin.jvm.internal"))
-//            mutators.set(setOf("NEW_DEFAULTS"))
-////            targetClasses.set(setOf("strikt.*"))  //by default "${project.group}.*"
-////            targetTests.set(setOf("strikt.**.*"))
-////            pitestVersion.set("1.5.0")
-////            threads.set(System.getenv("PITEST_THREADS")?.toInt()
-////                ?: Runtime.getRuntime().availableProcessors())
-//            outputFormats.set(setOf("XML", "HTML"))
-//        }
-//    }
-
 
 }

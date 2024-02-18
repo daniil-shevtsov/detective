@@ -1,3 +1,5 @@
+import info.solidsoft.gradle.pitest.PitestPlugin
+
 //import info.solidsoft.gradle.pitest.PitestPluginExtension
 
 plugins {
@@ -5,8 +7,9 @@ plugins {
     id("kotlin-android")
     id("org.jetbrains.kotlin.kapt")
     id("androidx.navigation.safeargs.kotlin")
-//    id("info.solidsoft.pitest")
+    id("info.solidsoft.pitest")
 }
+plugins.apply(PitestPlugin::class.java)
 
 android {
     compileSdk = Versions.androidCompileSdk
@@ -56,6 +59,23 @@ android {
 
     tasks.withType<Test> {
         useJUnitPlatform()
+    }
+
+    afterEvaluate {
+        plugins.withId("info.solidsoft.pitest") {
+            configure<info.solidsoft.gradle.pitest.PitestPluginExtension> {
+//            jvmArgs.set(listOf("-Xmx512m"))
+                testPlugin.set("junit5")
+//            avoidCallsTo.set(setOf("kotlin.jvm.internal"))
+//            mutators.set(setOf("NEW_DEFAULTS"))
+////            targetClasses.set(setOf("strikt.*"))  //by default "${project.group}.*"
+////            targetTests.set(setOf("strikt.**.*"))
+////            pitestVersion.set("1.5.0")
+////            threads.set(System.getenv("PITEST_THREADS")?.toInt()
+////                ?: Runtime.getRuntime().availableProcessors())
+//            outputFormats.set(setOf("XML", "HTML"))
+            }
+        }
     }
 
 }
